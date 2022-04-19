@@ -1,0 +1,10 @@
+# short-description: Create SD card image for stm32mp15x
+# long-description: Creates a partitioned SD card image for stm32mp15x.
+
+part fsbl1 --source rawcopy --sourceparams="file=tf-a.stm32"   --ondisk mmcblk --align 1 --size 256k --part-name fsbl1
+part fsbl2 --source rawcopy --sourceparams="file=tf-a.stm32"   --ondisk mmcblk --align 1 --size 256k --part-name fsbl2
+part ssbl  --source rawcopy --sourceparams="file=u-boot.stm32" --ondisk mmcblk --align 1 --size 2M   --part-name ssbl
+
+part /     --source rootfs  --ondisk mmcblk --fstype=ext4  --label root --align 4096 --size 512M
+
+bootloader --ptable gpt
