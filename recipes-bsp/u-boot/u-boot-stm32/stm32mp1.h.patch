@@ -75,7 +75,7 @@ index becca68a78..8f39734ee0 100644
 -		"fi;\0" \
 +	"fdt_high=0xffffffff\0" \
 +	"initrd_high=0xffffffff\0" \
-+	"bootlimit=0\0" \
++	"bootlimit=3\0" \
 +	"altbootcmd=if test ${active_system} = 1; then setenv active_system 0; else setenv active_system 1; fi; saveenv; run bootcmd\0" \
  	STM32MP_BOOTCMD \
 -	STM32MP_ANDROID \
