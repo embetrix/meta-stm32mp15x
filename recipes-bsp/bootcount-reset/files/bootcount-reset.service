@@ -1,0 +1,7 @@
+[Unit]
+Description=Bootcount Reset timer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bootcount-reset
+
