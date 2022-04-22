@@ -43,6 +43,10 @@ PREFERRED_PROVIDER_u-boot-fw-utils = "libubootenv"
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
                     kernel-image \
                     kernel-modules \
+                    "
+
+MACHINE_EXTRA_RRECOMMENDS += "\
+                    bootcount-reset \
                     u-boot-fw-utils \
                     "
 
