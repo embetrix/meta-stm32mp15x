@@ -2,7 +2,7 @@ DESCRIPTION = "STM32 Linux Kernel"
 SECTION = "kernel"
 LICENSE = "GPLv2"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
 inherit kernel
 require recipes-kernel/linux/linux-yocto.inc

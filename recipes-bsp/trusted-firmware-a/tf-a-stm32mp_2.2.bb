@@ -38,7 +38,7 @@ EXTRA_OEMAKE += "STM32MP_EMMC=0"
 EXTRA_OEMAKE += "STM32MP_SDMMC=1"
 EXTRA_OEMAKE += "DTB_FILE_NAME=${TFA_DEVICETREE}.${DT_SUFFIX}"
 
-do_compile_prepend() {
+do_compile:prepend() {
 
     unset LDFLAGS
     unset CFLAGS
@@ -61,6 +61,6 @@ do_deploy() {
 
 addtask deploy before do_package after do_compile
 
-FILES_${PN} = "/boot"
+FILES:${PN} = "/boot"
 
 COMPATIBLE_MACHINE = "(stm32mp15x)"

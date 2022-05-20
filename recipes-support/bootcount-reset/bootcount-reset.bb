@@ -24,7 +24,7 @@ do_install () {
 }
 
 SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_SERVICE_${PN} = "bootcount-reset.timer"
+SYSTEMD_SERVICE:${PN} = "bootcount-reset.timer"
 
-FILES_${PN} = "${bindir} ${systemd_unitdir}/system/"
+FILES:${PN} = "${bindir} ${systemd_unitdir}/system/"
 
