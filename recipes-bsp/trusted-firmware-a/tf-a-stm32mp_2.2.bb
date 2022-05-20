@@ -11,6 +11,7 @@ SRCBRANCH = "v2.2-stm32mp"
 SRCREV = "a4c92eca15fab3d985bfd93f2bbdb5dc84298729"
 
 SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=https;branch=${SRCBRANCH}"
+SRC_URI += "file://0001-correct-DTC-version-detection.patch"
 
 DEPENDS += "dtc-native"
 
