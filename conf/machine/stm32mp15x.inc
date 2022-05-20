@@ -3,7 +3,7 @@
 #@DESCRIPTION: Machine configuration for generic stm32mp15x
 #@MAINTAINER: Ayoub Zaki <ayoub.zaki@embexus.com>
 
-include conf/machine/include/tune-cortexa7.inc
+require conf/machine/include/arm/armv7a/tune-cortexa7.inc
 require conf/machine/include/soc-family.inc
 
 DEFAULTTUNE = "cortexa7thf-neon-vfpv4"
