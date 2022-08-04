@@ -55,7 +55,7 @@ do_compile:append() {
         BL32=${S}/build/stm32mp1/release/bl32.bin \
         FW_CONFIG=${S}/build/stm32mp1/release/fw-config.dtb \
         BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
-		BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
+        BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
 }
 
 do_install() {
