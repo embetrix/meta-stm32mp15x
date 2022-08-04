@@ -1,13 +1,14 @@
 diff --git a/plat/st/stm32mp1/platform.mk b/plat/st/stm32mp1/platform.mk
-index 12bf617b2..1284ef631 100644
+index 17a089c1a..ca99f3f94 100644
 --- a/plat/st/stm32mp1/platform.mk
 +++ b/plat/st/stm32mp1/platform.mk
-@@ -247,7 +247,7 @@ clean_stm32image:
+@@ -109,7 +109,8 @@ endif
+ endif
  
- check_dtc_version:
- 	$(eval DTC_V = $(shell $(DTC) -v | awk '{print $$NF}'))
--	$(eval DTC_VERSION = $(shell printf "%d" $(shell echo ${DTC_V} | cut -d- -f1 | sed "s/\./0/g")))
-+	$(eval DTC_VERSION = $(shell printf "%d" $(shell echo ${DTC_V} | cut -d- -f1 | sed "s/\./0/g" | grep -o [0-9]*)))
- 	@if [ ${DTC_VERSION} -lt 10404 ]; then \
- 		echo "dtc version too old (${DTC_V}), you need at least version 1.4.4"; \
- 		false; \
+ $(eval DTC_V = $(shell $(DTC) -v | awk '{print $$NF}'))
+-$(eval DTC_VERSION = $(shell printf "%d" $(shell echo ${DTC_V} | cut -d- -f1 | sed "s/\./0/g")))
++$(eval DTC_VERSION = $(shell printf "%d" $(shell echo ${DTC_V} | cut -d- -f1 | sed "s/\./0/g" | grep -o [0-9]*)))
++
+ DTC_CPPFLAGS		+=	${INCLUDES}
+ DTC_FLAGS		+=	-Wno-unit_address_vs_reg
+ ifeq ($(shell test $(DTC_VERSION) -ge 10601; echo $$?),0)
