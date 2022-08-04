@@ -15,3 +15,13 @@ SRC_URI += "file://stm32mp1.h.patch"
 UBOOT_INITIAL_ENV = "u-boot-initial-env"
 
 COMPATIBLE_MACHINE = "(stm32mp15x)"
+
+do_deploy:append() {
+
+    install -m 644 ${B}/u-boot-nodtb.bin ${DEPLOYDIR}/u-boot-nodtb-${MACHINE}.bin
+    install -m 644 ${B}/u-boot.dtb ${DEPLOYDIR}/u-boot-${MACHINE}.dtb
+    cd ${DEPLOYDIR}
+    ln -snf  u-boot-nodtb-${MACHINE}.bin u-boot-nodtb.bin
+    ln -snf  u-boot-${MACHINE}.dtb u-boot.dtb
+    cd -
+}
