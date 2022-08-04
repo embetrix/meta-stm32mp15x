@@ -3,7 +3,7 @@
 
 part fsbl1 --source rawcopy --sourceparams="file=tf-a.stm32"   --ondisk mmcblk --align 1 --size 256k --part-name fsbl1
 part fsbl2 --source rawcopy --sourceparams="file=tf-a.stm32"   --ondisk mmcblk --align 1 --size 256k --part-name fsbl2
-part ssbl  --source rawcopy --sourceparams="file=u-boot.stm32" --ondisk mmcblk --align 1 --size 2M   --part-name ssbl
+part fip  --source rawcopy --sourceparams="file=fip.bin"       --ondisk mmcblk --align 1 --size 4M   --part-name fip
 
 part /     --source rootfs  --ondisk mmcblk --fstype=ext4  --label root --align 4096 --size 512M
 
