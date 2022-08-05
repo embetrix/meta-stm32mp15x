@@ -4,6 +4,8 @@ SRC_URI += "\
 	file://fw_env.config \
 	"
 
+RDEPENDS:${PN} += "u-boot-default-env"
+
 do_install:append() {
 
 	install -d ${D}${sysconfdir}		
