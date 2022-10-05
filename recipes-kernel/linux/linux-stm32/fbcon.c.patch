@@ -1,5 +1,5 @@
 From 01a4b21599f50076795a158caf9de77691ab3fb5 Mon Sep 17 00:00:00 2001
-From: Ayoub Zaki <ayoub.zaki@embexus.com>
+From: Ayoub Zaki <ayoub.zaki@embetrix.com>
 Date: Thu, 17 Feb 2022 07:39:32 +0100
 Subject: [PATCH] draw logo to show kernel splash in case of option quiet is
  set

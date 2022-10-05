@@ -21,7 +21,7 @@ branch: same dedicated branch as meta-stm32mp15x
 ## Contributing
 
 If you want to contribute changes, you can send Github pull requests at:
-https://github.com/embexus/meta-stm32mp15x/pulls
+https://github.com/embetrix/meta-stm32mp15x/pulls
 
 
 ## Maintainers
