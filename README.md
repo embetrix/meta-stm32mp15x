@@ -26,4 +26,4 @@ https://github.com/embexus/meta-stm32mp15x/pulls
 
 ## Maintainers
 
- - Ayoub Zaki <info@embexus.com>
+ - Ayoub Zaki <info@embetrix.com>
