@@ -35,7 +35,7 @@ UBOOT_MACHINE     ?= "stm32mp15_trusted_defconfig"
 UBOOT_DEVICETREE  ?= "stm32mp157f-dk2"
 UBOOT_MAKE_TARGET ?= "DEVICE_TREE=${UBOOT_DEVICETREE} all"
 
-MACHINE_FEATURES  = ""
+MACHINE_FEATURES  = "wifi"
 
 # Preferred providers
 PREFERRED_PROVIDER_u-boot-fw-utils = "libubootenv"
@@ -48,6 +48,7 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 MACHINE_EXTRA_RRECOMMENDS += "\
                     bootcount-reset \
                     u-boot-fw-utils \
+                    linux-firmware-bcm43430 \
                     "
 
 WKS_FILE_DEPENDS ?= " \
