@@ -2,7 +2,7 @@
 
 ## Summary
 
-**meta-stm32mp15x** is a yocto layer containing BSP support for the [stm32mp15x](https://wiki.st.com/stm32mpu/wiki/STM32MP157x-DKx_-_hardware_description) based devices.
+**meta-stm32mp15x** is a yocto layer containing BSP support for the [stm32mp15x](https://wiki.st.com/stm32mpu/wiki/Category:STM32MP15x) based devices.
 
 This layer relies on OpenEmbedded/Yocto build system and depends on:
 
@@ -13,7 +13,7 @@ layers: meta
 branch: same dedicated branch as meta-stm32mp15x
 ```
 
-## List of supported and tested boards:
+## List of tested boards:
 
 * [stm32mp157c-dk2](https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html)
 * [stm32mp157f-dk2](https://www.st.com/en/evaluation-tools/stm32mp157f-dk2.html)
