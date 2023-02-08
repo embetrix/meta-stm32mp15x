@@ -11,6 +11,7 @@ SRCREV = "d543131c5835b2ca010d8169a06dbca3014355fd"
 
 SRC_URI  = "git://github.com/STMicroelectronics/u-boot.git;protocol=https;branch=${SRCBRANCH}"
 SRC_URI += "file://stm32mp1.h.patch"
+SRC_URI += "file://dtc-lexer.l.patch"
 
 UBOOT_INITIAL_ENV = "u-boot-initial-env"
 
