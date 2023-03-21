@@ -7,14 +7,17 @@ inherit deploy
 
 PROVIDES += "virtual/trusted-firmware-a"
 
-SRCBRANCH = "v2.4-stm32mp"
-SRCREV = "74e6754b9f7086fdd4545cbc2f606799c09f5cbb"
+SRCBRANCH = "v2.6-stm32mp"
+SRCREV = "4b6e8e9bf8fa676ff8d1358ea2cf2e44904c2473"
 
 SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=https;branch=${SRCBRANCH}"
-SRC_URI += "file://0001-correct-DTC-version-detection.patch"
 
 DEPENDS += "dtc-native"
-do_compile[depends] += "virtual/bootloader:do_deploy"
+
+do_compile[depends] += " \
+    virtual/bootloader:do_deploy \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'virtual/optee-os:do_deploy', '', d)} \
+"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
@@ -26,12 +29,14 @@ TF_A_SUFFIX = "stm32"
 DT_SUFFIX = "dtb"
 FIP_BASENAME="fip"
 
+AARCH32_SP_CONF = "${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'optee', 'sp_min', d)}"
+
 # Configure stm32mp1 make settings
 EXTRA_OEMAKE  = 'CROSS_COMPILE=${TARGET_PREFIX}'
 EXTRA_OEMAKE += "PLAT=stm32mp1"
 EXTRA_OEMAKE += "ARCH=aarch32"
 EXTRA_OEMAKE += "ARM_ARCH_MAJOR=7"
-EXTRA_OEMAKE += "AARCH32_SP=sp_min"
+EXTRA_OEMAKE += "AARCH32_SP=${AARCH32_SP_CONF}"
 EXTRA_OEMAKE += "STM32MP_UART_PROGRAMMER=0"
 EXTRA_OEMAKE += "STM32MP_USB_PROGRAMMER=1"
 EXTRA_OEMAKE += "STM32MP_SPI_NAND=0"
@@ -50,12 +55,21 @@ do_compile:prepend() {
 
 # Generate FIP
 do_compile:append() {
-                                          
-    oe_runmake fip 	\
-        BL32=${S}/build/stm32mp1/release/bl32.bin \
-        FW_CONFIG=${S}/build/stm32mp1/release/fw-config.dtb \
-        BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
-        BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
+
+    if [ "${AARCH32_SP_CONF}" == "optee" ]; then
+        oe_runmake fip 	\
+            BL32=${DEPLOY_DIR_IMAGE}/optee/tee-header_v2-${OPTEE_CONF}.bin \
+            BL32_EXTRA1=${DEPLOY_DIR_IMAGE}/optee/tee-pager_v2-${OPTEE_CONF}.bin \
+            BL32_EXTRA2=${DEPLOY_DIR_IMAGE}/optee/tee-pageable_v2-${OPTEE_CONF}.bin \ 
+            FW_CONFIG=${S}/build/stm32mp1/release/fw-config.dtb \
+            BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
+            BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
+    else
+        oe_runmake fip 	\
+            FW_CONFIG=${S}/build/stm32mp1/release/fw-config.dtb \
+            BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
+            BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
+    fi
 }
 
 do_install() {
