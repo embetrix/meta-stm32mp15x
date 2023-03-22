@@ -1,7 +1,0 @@
-require linux-stm32.inc
-
-LINUX_VERSION = "5.4.160"
-SRCBRANCH = "v5.4-stm32mp"
-SRCREV = "17efa1a44c7f615e9ec321f82138e7711690e7a1"
-
-LIC_FILES_CHKSUM = "file://${S}/COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
