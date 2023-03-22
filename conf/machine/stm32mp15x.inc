@@ -14,7 +14,6 @@ PREFERRED_PROVIDER_virtual/kernel     = "linux-stm32"
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-stm32"
 PREFERRED_PROVIDER_u-boot             = "u-boot-stm32"
 
-UBOOT_SUFFIX     = "stm32"
 UBOOT_ENTRYPOINT = "0xC2000000"
 UBOOT_DTB_LOADADDRESS = "0xC4000000"
 
@@ -25,17 +24,27 @@ KERNEL_CLASSES  += "kernel-fitimage"
 KERNEL_IMAGETYPE = "fitImage"
 
 # Trused Firmware
-TFA_DEVICETREE    ?= "stm32mp157f-dk2"
+TFA_DEVICETREE    ?= "${MACHINE}"
 
 # Kernel
-KERNEL_DEVICETREE ?= "stm32mp157f-dk2.dtb"
+KERNEL_DEVICETREE ?= "${MACHINE}.dtb"
 
 # U-Boot
-UBOOT_MACHINE     ?= "stm32mp15_trusted_defconfig"
-UBOOT_DEVICETREE  ?= "stm32mp157f-dk2"
+UBOOT_MACHINE     = "stm32mp15_defconfig"
+#UBOOT_MACHINE     ?= "stm32mp15_trusted_defconfig"
+UBOOT_DEVICETREE  ?= "${MACHINE}"
 UBOOT_MAKE_TARGET ?= "DEVICE_TREE=${UBOOT_DEVICETREE} all"
 
-MACHINE_FEATURES  = "wifi"
+# Optee
+OPTEE_PLATFORM   ?= "stm32mp1"
+OPTEE_CONF       ?= "${MACHINE}"
+OPTEE_DEVICETREE ?= "${MACHINE}.dts"
+OPTEE_HEADER     = "tee-header_v2"
+OPTEE_PAGER      = "tee-pager_v2"
+OPTEE_PAGEABLE   = "tee-pageable_v2"
+OPTEE_SUFFIX     = "bin"
+
+MACHINE_FEATURES  += "wifi optee"
 
 # Preferred providers
 PREFERRED_PROVIDER_u-boot-fw-utils = "libubootenv"
