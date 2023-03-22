@@ -13,14 +13,11 @@ SRCBRANCH = "v2021.10-stm32mp"
 SRCREV = "3984366f6997c680b8c6ccc82d50e77a6e1cccf2"
 
 SRC_URI  = "git://github.com/STMicroelectronics/u-boot.git;protocol=https;branch=${SRCBRANCH}"
-#SRC_URI += "file://stm32mp15_trusted_defconfig.patch"
-#SRC_URI += "file://stm32mp1.h.patch"
+SRC_URI += "file://stm32mp15.patch"
 
 UBOOT_INITIAL_ENV = "u-boot-initial-env"
 
 COMPATIBLE_MACHINE = "(stm32mp15x)"
-
-CFLAGS:append = "-DLOG_DEBUG=1  -DDEBUG=1"
 
 do_deploy:append() {
 
