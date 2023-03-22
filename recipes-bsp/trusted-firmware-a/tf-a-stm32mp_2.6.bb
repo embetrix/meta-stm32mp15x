@@ -29,16 +29,18 @@ TF_A_SUFFIX = "stm32"
 DT_SUFFIX = "dtb"
 FIP_BASENAME="fip"
 
-AARCH32_SP_CONF = "${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'optee', 'sp_min', d)}"
+# Configure build type: debug/release
+TFA_BUILD_TYPE ?= "release"
 
 # Configure stm32mp1 make settings
 EXTRA_OEMAKE  = 'CROSS_COMPILE=${TARGET_PREFIX}'
 EXTRA_OEMAKE += "PLAT=stm32mp1"
 EXTRA_OEMAKE += "ARCH=aarch32"
 EXTRA_OEMAKE += "ARM_ARCH_MAJOR=7"
-EXTRA_OEMAKE += "AARCH32_SP=${AARCH32_SP_CONF}"
+EXTRA_OEMAKE += "AARCH32_SP=${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'optee', 'sp_min', d)}"
+EXTRA_OEMAKE += "${@bb.utils.contains('TFA_BUILD_TYPE', 'release', '', 'DEBUG=1 LOG_LEVEL=40', d)}"
 EXTRA_OEMAKE += "STM32MP_UART_PROGRAMMER=0"
-EXTRA_OEMAKE += "STM32MP_USB_PROGRAMMER=1"
+EXTRA_OEMAKE += "STM32MP_USB_PROGRAMMER=${@bb.utils.contains('TFA_BUILD_TYPE', 'release', '1', '0', d)}"
 EXTRA_OEMAKE += "STM32MP_SPI_NAND=0"
 EXTRA_OEMAKE += "STM32MP_RAW_NAND=0"
 EXTRA_OEMAKE += "STM32MP_SPI_NOR=0"
@@ -56,17 +58,17 @@ do_compile:prepend() {
 # Generate FIP
 do_compile:append() {
 
-    if [ "${AARCH32_SP_CONF}" == "optee" ]; then
+    if ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'true', 'false', d)}; then
         oe_runmake fip 	\
-            BL32=${DEPLOY_DIR_IMAGE}/optee/tee-header_v2-${OPTEE_CONF}.bin \
-            BL32_EXTRA1=${DEPLOY_DIR_IMAGE}/optee/tee-pager_v2-${OPTEE_CONF}.bin \
-            BL32_EXTRA2=${DEPLOY_DIR_IMAGE}/optee/tee-pageable_v2-${OPTEE_CONF}.bin \ 
-            FW_CONFIG=${S}/build/stm32mp1/release/fw-config.dtb \
+            BL32=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_HEADER}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
+            BL32_EXTRA1=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGER}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
+            BL32_EXTRA2=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGEABLE}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
+            FW_CONFIG=${S}/build/stm32mp1/${TFA_BUILD_TYPE}/fw-config.dtb \
             BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
             BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
     else
         oe_runmake fip 	\
-            FW_CONFIG=${S}/build/stm32mp1/release/fw-config.dtb \
+            FW_CONFIG=${S}/build/stm32mp1/${TFA_BUILD_TYPE}/fw-config.dtb \
             BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
             BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
     fi
@@ -75,14 +77,14 @@ do_compile:append() {
 do_install() {
                                           
     install -d ${D}/boot
-    install -m 644 ${S}/build/stm32mp1/release/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${D}/boot
+    install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${D}/boot
 }
 
 do_deploy() {
                                           
     install -d ${DEPLOYDIR}
-    install -m 644 ${S}/build/stm32mp1/release/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${DEPLOYDIR}/
-    install -m 644 ${S}/build/stm32mp1/release/${FIP_BASENAME}.bin ${DEPLOYDIR}/${FIP_BASENAME}-${MACHINE}.bin
+    install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${DEPLOYDIR}/
+    install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${FIP_BASENAME}.bin ${DEPLOYDIR}/${FIP_BASENAME}-${MACHINE}.bin
     cd ${DEPLOYDIR}/
     ln -sf  ${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${TF_A_BASENAME}.${TF_A_SUFFIX}
     ln -sf  ${FIP_BASENAME}-${MACHINE}.bin ${FIP_BASENAME}.bin
