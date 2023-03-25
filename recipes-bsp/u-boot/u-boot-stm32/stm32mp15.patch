@@ -1,5 +1,5 @@
 diff --git a/configs/stm32mp15_defconfig b/configs/stm32mp15_defconfig
-index b4b2954273..c5ed2c6fd4 100644
+index b4b2954273..ac8195b245 100644
 --- a/configs/stm32mp15_defconfig
 +++ b/configs/stm32mp15_defconfig
 @@ -4,13 +4,13 @@ CONFIG_TFABOOT=y
@@ -18,6 +18,16 @@ index b4b2954273..c5ed2c6fd4 100644
  CONFIG_CMD_STM32PROG=y
  # CONFIG_ARMV7_NONSEC is not set
  CONFIG_DISTRO_DEFAULTS=y
+@@ -162,3 +162,9 @@ CONFIG_FDT_FIXUP_PARTITIONS=y
+ # CONFIG_LMB_USE_MAX_REGIONS is not set
+ CONFIG_LMB_MEMORY_REGIONS=2
+ CONFIG_LMB_RESERVED_REGIONS=16
++CONFIG_BOOTCOUNT_LIMIT=y
++CONFIG_BOOTCOUNT_GENERIC=y
++CONFIG_SYS_BOOTCOUNT_MAGIC=0xB001C041
++CONFIG_BOOTCOUNT_BOOTLIMIT=3
++CONFIG_SYS_BOOTCOUNT_ADDR=0x5C00A154
++CONFIG_SYS_BOOTCOUNT_SINGLEWORD=y
 diff --git a/include/configs/stm32mp15_common.h b/include/configs/stm32mp15_common.h
 index 58971cc656..df36d19f94 100644
 --- a/include/configs/stm32mp15_common.h

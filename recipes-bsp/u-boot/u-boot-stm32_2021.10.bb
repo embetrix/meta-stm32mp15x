@@ -7,8 +7,6 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 DEPENDS += "bc-native dtc-native"
 DEPENDS += "python3-setuptools-native"
 
-UBOOT_MACHINE     = "stm32mp15_defconfig"
-
 SRCBRANCH = "v2021.10-stm32mp"
 SRCREV = "3984366f6997c680b8c6ccc82d50e77a6e1cccf2"
 
