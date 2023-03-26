@@ -1,0 +1,68 @@
+From: Sumit Garg <sumit.garg@linaro.org>
+To: stable@vger.kernel.org
+Cc: gregkh@linuxfoundation.org, jens.wiklander@linaro.org,
+	jerome.forissier@linaro.org, Sumit Garg <sumit.garg@linaro.org>,
+	Sahil Malhotra <sahil.malhotra@nxp.com>
+Subject: [PATCH] tee: Fix tee_shm_register() for kernel TEE drivers
+Date: Tue,  8 Nov 2022 16:23:01 +0530	[thread overview]
+Message-ID: <20221108105301.1925751-1-sumit.garg@linaro.org> (raw)
+
+Commit 056d3fed3d1f ("tee: add tee_shm_register_{user,kernel}_buf()")
+refactored tee_shm_register() into corresponding user and kernel space
+functions named tee_shm_register_{user,kernel}_buf(). The upstream fix
+commit 573ae4f13f63 ("tee: add overflow check in register_shm_helper()")
+only applied to tee_shm_register_user_buf().
+
+But the stable kernel 4.19, 5.4, 5.10 and 5.15 don't have the above
+mentioned tee_shm_register() refactoring commit. Hence a direct backport
+wasn't possible and the fix has to be rather applied to
+tee_ioctl_shm_register().
+
+Somehow the fix was correctly backported to 4.19 and 5.4 stable kernels
+but the backports for 5.10 and 5.15 stable kernels were broken as fix
+was applied to common tee_shm_register() function which broke its kernel
+space users such as trusted keys driver.
+
+Fortunately the backport for 5.10 stable kernel was incidently fixed by:
+commit 606fe84a4185 ("tee: fix memory leak in tee_shm_register()"). So
+fix the backport for 5.15 stable kernel as well.
+
+Fixes: 578c349570d2 ("tee: add overflow check in register_shm_helper()")
+Cc: stable@vger.kernel.org # 5.15
+Reported-by: Sahil Malhotra <sahil.malhotra@nxp.com>
+Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+---
+ drivers/tee/tee_core.c | 3 +++
+ drivers/tee/tee_shm.c  | 3 ---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+index 3fc426dad2df..a44e5b53e7a9 100644
+--- a/drivers/tee/tee_core.c
++++ b/drivers/tee/tee_core.c
+@@ -334,6 +334,9 @@ tee_ioctl_shm_register(struct tee_context *ctx,
+ 	if (data.flags)
+ 		return -EINVAL;
+ 
++	if (!access_ok((void __user *)(unsigned long)data.addr, data.length))
++		return -EFAULT;
++
+ 	shm = tee_shm_register(ctx, data.addr, data.length,
+ 			       TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
+ 	if (IS_ERR(shm))
+diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+index bd96ebb82c8e..6fb4400333fb 100644
+--- a/drivers/tee/tee_shm.c
++++ b/drivers/tee/tee_shm.c
+@@ -223,9 +223,6 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+ 		goto err;
+ 	}
+ 
+-	if (!access_ok((void __user *)addr, length))
+-		return ERR_PTR(-EFAULT);
+-
+ 	mutex_lock(&teedev->mutex);
+ 	shm->id = idr_alloc(&teedev->idr, shm, 1, 0, GFP_KERNEL);
+ 	mutex_unlock(&teedev->mutex);
+-- 
+2.34.1
