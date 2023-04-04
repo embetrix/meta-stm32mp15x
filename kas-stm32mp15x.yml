@@ -1,7 +1,7 @@
 header:
   version: 11
 machine: stm32mp157f-dk2
-distro: ozyx
+distro: poky
 target:
   - core-image-minimal
 repos:
