@@ -12,7 +12,7 @@ SRCREV = "4b6e8e9bf8fa676ff8d1358ea2cf2e44904c2473"
 
 SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=https;branch=${SRCBRANCH}"
 
-DEPENDS += "dtc-native"
+DEPENDS += "dtc-native openssl-native"
 
 do_compile[depends] += " \
     virtual/bootloader:do_deploy \
@@ -53,6 +53,11 @@ do_compile:prepend() {
     unset LDFLAGS
     unset CFLAGS
     unset CPPFLAGS
+
+    sed -i '/^INCLUDE_PATHS/ s,$, \${BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
+    sed -i '/^OPENSSL_DIR/c\\OPENSSL_DIR := \${RECIPE_SYSROOT_NATIVE}/usr' ${S}/tools/fiptool/Makefile
+    sed -i '/^LDLIBS/ s,$,  \-Wl\,\-R\${RECIPE_SYSROOT_NATIVE}/usr/lib,' ${S}/tools/fiptool/Makefile
+
 }
 
 # Generate FIP

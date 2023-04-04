@@ -35,6 +35,5 @@ local_conf_header:
     PACKAGE_CLASSES = "package_deb"
     PATCHRESOLVE = "noop"
     INHERIT += "rm_work"
-    ACCEPT_FSL_EULA = "1"
     EXTRA_IMAGE_FEATURES ?= "debug-tweaks"
 
