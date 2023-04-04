@@ -8,9 +8,31 @@ This layer relies on OpenEmbedded/Yocto build system and depends on:
 
 ```
 [OECORE]
-URI: git://git.yoctoproject.org/poky
+URI: https://git.yoctoproject.org/git/poky.git
 layers: meta
 branch: same dedicated branch as meta-stm32mp15x
+```
+and
+
+```
+[OE]
+URI: https://github.com/openembedded/meta-openembedded.git
+layers: meta-oe
+branch: same dedicated branch as meta-stm32mp15x
+```
+
+## Build
+
+This layer can be integrated in your layers or built standalone using [kas-tool](https://github.com/siemens/kas):
+
+```
+kas build kas-stm32mp15x.yml
+```
+
+or using kas docker container:
+
+```
+kas-container build kas-stm32mp15x.yml
 ```
 
 ## List of tested boards:

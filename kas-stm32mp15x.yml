@@ -1,7 +1,7 @@
 header:
   version: 11
 machine: stm32mp157f-dk2
-distro: ozyx
+distro: poky
 target:
   - core-image-minimal
 repos:
@@ -35,6 +35,5 @@ local_conf_header:
     PACKAGE_CLASSES = "package_deb"
     PATCHRESOLVE = "noop"
     INHERIT += "rm_work"
-    ACCEPT_FSL_EULA = "1"
     EXTRA_IMAGE_FEATURES ?= "debug-tweaks"
 
