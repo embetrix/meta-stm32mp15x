@@ -1,0 +1,40 @@
+header:
+  version: 11
+machine: stm32mp157f-dk2
+distro: ozyx
+target:
+  - core-image-minimal
+repos:
+  # This repo contains the kas-project.yml file - there is no need to fetch it again.
+  # It's current revision will be used to perform the build.
+  meta-stm32mp15x:
+  poky:
+    url: "https://git.yoctoproject.org/git/poky"
+    refspec: kirkstone
+    path: "layers"
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+  meta-openembedded:
+    url: "https://github.com/openembedded/meta-openembedded.git"
+    refspec: kirkstone
+    path: "layers/meta-openembedded"
+    layers:
+      meta-oe:
+      meta-python:
+      meta-networking:
+      meta-perl:
+      meta-python:
+      meta-multimedia:
+      meta-filesystems:
+local_conf_header:
+  standard: |
+    CONF_VERSION = "2"
+    SDKMACHINE = "x86_64"
+    PACKAGE_CLASSES = "package_deb"
+    PATCHRESOLVE = "noop"
+    INHERIT += "rm_work"
+    ACCEPT_FSL_EULA = "1"
+    EXTRA_IMAGE_FEATURES ?= "debug-tweaks"
+
