@@ -3,7 +3,7 @@ header:
 machine: stm32mp157f-dk2
 distro: poky
 target:
-  - core-image-minimal
+  - stm32mp15x-demo-image
 repos:
   # This repo contains the kas-project.yml file - there is no need to fetch it again.
   # It's current revision will be used to perform the build.
