@@ -35,6 +35,10 @@ or using kas docker container:
 kas-container build kas-stm32mp15x.yml
 ```
 
+Flash image on a SDCard using [bmap-tools](https://github.com/intel/bmap-tools):
+
+    $ sudo bmaptool copy build/tmp/deploy/images/stm32mp157f-dk2/stm32mp15x-demo-image-stm32mp157f-dk2.wic.gz /dev/mmcblk0
+
 ## List of tested boards:
 
 * [stm32mp157c-dk2](https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html)
