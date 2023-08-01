@@ -7,8 +7,8 @@ inherit deploy
 
 PROVIDES += "virtual/trusted-firmware-a"
 
-SRCBRANCH = "v2.6-stm32mp"
-SRCREV = "4b6e8e9bf8fa676ff8d1358ea2cf2e44904c2473"
+SRCBRANCH = "v2.8-stm32mp"
+SRCREV = "230b4d8447a1b07bb92035e19ccec8c633103a08"
 
 SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=https;branch=${SRCBRANCH}"
 
