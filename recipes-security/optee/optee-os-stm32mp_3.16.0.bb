@@ -3,7 +3,8 @@ LICENSE = "BSD-2-Clause & BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c1f21c4f72f372ef38a5a4aee55ec173"
 
 SRC_URI = "git://github.com/STMicroelectronics/optee_os.git;protocol=ssh;branch=${SRCBRANCH}"
-SRC_URI += "file://ta-pkcs11-fix-ecc-generation-and-ecc-import.patch"
+SRC_URI += "file://0001-ta-pkcs11-fix-ecc-generation-and-ecc-import.patch"
+SRC_URI += "file://0002-ta-pkcs11-rsa-public-key-import-calculate-CKA_MODULUS_BITS.patch"
 SRCBRANCH = "3.16.0-stm32mp"
 SRCREV    = "6c446f2189609f39ab7ccd59c79853fc7fa52977"
 
