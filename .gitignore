@@ -1,2 +1,6 @@
 build/
+<<<<<<< HEAD
 layers/
+=======
+layers/
+>>>>>>> add .gitignore
