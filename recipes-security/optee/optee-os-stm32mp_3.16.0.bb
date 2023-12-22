@@ -39,6 +39,7 @@ EXTRA_OEMAKE += "${@bb.utils.contains('TUNE_FEATURES', 'aarch64', 'CFG_ARM64_cor
 EXTRA_OEMAKE += "NOWERROR=1"
 EXTRA_OEMAKE += "CFG_IN_TREE_EARLY_TAS+=trusted_keys/f04a0fe7-1f5d-4b9b-abf7-619b85b4ce8c"
 EXTRA_OEMAKE += "CFG_IN_TREE_EARLY_TAS+=pkcs11/fd02c9da-306c-48c7-a49c-bbd827ae86ee"
+EXTRA_OEMAKE += "CFG_PKCS11_TA_HEAP_SIZE=131072"
 EXTRA_OEMAKE += "LDFLAGS="
 
 # debug and trace
