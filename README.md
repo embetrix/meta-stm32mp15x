@@ -49,78 +49,78 @@ Insert your SD Card into the compatible device and you should see in your serial
 ```
 NOTICE:  CPU: STM32MP157FAC Rev.Z
 NOTICE:  Model: STMicroelectronics STM32MP157F-DK2 Discovery Board
-NOTICE:  Board: MB1272 Var4.0 Rev.C-02
-NOTICE:  BL2: v2.6-stm32mp1-r2.0(release):v2.6-stm32mp-r2-dirty(4b6e8e9b)
-NOTICE:  BL2: Built : 13:55:00, Oct 20 2022
+NOTICE:  Board: MB1272 Var4.0 Rev.C-03
+NOTICE:  BL2: v2.8-stm32mp1-r1.1(release):v2.8-stm32mp-r1.1-3-g61924c04c-dirty(61924c04)
+NOTICE:  BL2: Built : 13:07:51, Oct 18 2023
 NOTICE:  BL2: Booting BL32
-optee optee: OP-TEE: revision 3.16 (6c446f21)
+optee optee: OP-TEE: revision 3.19 (d0159bbf)
 
 
-U-Boot 2021.10-stm32mp-r2 (Oct 17 2022 - 08:48:26 +0000)
+U-Boot 2022.10-stm32mp-r1.1 (Sep 18 2023 - 11:38:19 +0000)
 
 CPU: STM32MP157FAC Rev.Z
 Model: STMicroelectronics STM32MP157F-DK2 Discovery Board
 Board: stm32mp1 in trusted mode (st,stm32mp157f-dk2)
-Board: MB1272 Var4.0 Rev.C-02
+Board: MB1272 Var4.0 Rev.C-03
 DRAM:  512 MiB
-optee optee: OP-TEE: revision 3.16 (6c446f21)
+optee optee: OP-TEE: revision 3.19 (d0159bbf)
 Clocks:
 - MPU : 800 MHz
 - MCU : 208.878 MHz
 - AXI : 266.500 MHz
 - PER : 24 MHz
 - DDR : 533 MHz
-WDT:   Started with servicing (32s timeout)
+Core:  367 devices, 43 uclasses, devicetree: board
+WDT:   Started watchdog with servicing (32s timeout)
 NAND:  0 MiB
 MMC:   STM32 SD/MMC: 0, STM32 SD/MMC: 1
-Loading Environment from MMC... *** Warning - bad CRC, using default environment
-
+Loading Environment from MMC... OK
 In:    serial
 Out:   serial
 Err:   serial
 Net:   eth0: ethernet@5800a000
 Hit any key to stop autoboot:  0 
-8182000 bytes read in 463 ms (16.9 MiB/s)
+6907244 bytes read in 419 ms (15.7 MiB/s)
 ## Loading kernel from FIT Image at c8000000 ...
    Using 'conf-stm32mp157f-dk2.dtb' configuration
    Trying 'kernel-1' kernel subimage
      Description:  Linux kernel
-     Created:      2022-10-26   8:41:24 UTC
+     Created:      2023-10-02  11:43:32 UTC
      Type:         Kernel Image
      Compression:  uncompressed
      Data Start:   0xc8000118
-     Data Size:    8061152 Bytes = 7.7 MiB
+     Data Size:    6818136 Bytes = 6.5 MiB
      Architecture: ARM
      OS:           Linux
      Load Address: 0xc2000000
      Entry Point:  0xc2000000
      Hash algo:    sha256
-     Hash value:   ec7b197dde76b982a1381e64fa1a7eb854c90be8cb6be154fd8e3c3fc4438c06
+     Hash value:   955ad451b2131aafe7a1a766210bc5d74a1607c1044187afc1c30eef43647f2d
    Verifying Hash Integrity ... sha256+ OK
 ## Loading fdt from FIT Image at c8000000 ...
    Using 'conf-stm32mp157f-dk2.dtb' configuration
    Trying 'fdt-stm32mp157f-dk2.dtb' fdt subimage
      Description:  Flattened Device Tree blob
-     Created:      2022-10-26   8:41:24 UTC
+     Created:      2023-10-02  11:43:32 UTC
      Type:         Flat Device Tree
      Compression:  uncompressed
-     Data Start:   0xc87b0308
-     Data Size:    118879 Bytes = 116.1 KiB
+     Data Start:   0xc8680b80
+     Data Size:    87138 Bytes = 85.1 KiB
      Architecture: ARM
      Load Address: 0xc4000000
      Hash algo:    sha256
-     Hash value:   90eb0bd39bf80781b7dd933c47429ecf17f948ad2e3bf84f733cb93a835f3f5f
+     Hash value:   4acc0143bd2cc251ab55e9576e51b60ba9e5f767a734dac308aee309b7bf4d08
    Verifying Hash Integrity ... sha256+ OK
-   Loading fdt from 0xc87b0308 to 0xc4000000
+   Loading fdt from 0xc8680b80 to 0xc4000000
    Booting using the fdt blob at 0xc4000000
    Loading Kernel Image
-   Loading Device Tree to cffdf000, end cffff05e ... OK
+   Loading Device Tree to cffe7000, end cffff461 ... OK
 Bootstage space exhasuted
 
 Starting kernel ...
 
 
-Poky (Yocto Project Reference Distro) 4.0.8 stm32mp157f-dk2 ttySTM0
+Poky (Yocto Project Reference Distro) 4.0.15 stm32mp157f-dk2 ttySTM0
 
 stm32mp157f-dk2 login: root
 root@stm32mp157f-dk2:~#
