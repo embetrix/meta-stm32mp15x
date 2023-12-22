@@ -8,7 +8,7 @@ DEPENDS += "bc-native dtc-native"
 DEPENDS += "python3-setuptools-native"
 
 SRCBRANCH = "v2022.10-stm32mp"
-SRCREV = "aa6822adfbe7b0b89d646e987505a740511878e2"
+SRCREV = "2c7a6accfa78d34c402fa262bb53f0b952198882"
 
 SRC_URI  = "git://github.com/STMicroelectronics/u-boot.git;protocol=https;branch=${SRCBRANCH}"
 SRC_URI += "file://stm32mp15.patch"
