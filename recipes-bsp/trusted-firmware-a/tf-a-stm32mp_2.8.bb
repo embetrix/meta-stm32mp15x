@@ -8,7 +8,7 @@ inherit deploy
 PROVIDES += "virtual/trusted-firmware-a"
 
 SRCBRANCH = "v2.8-stm32mp"
-SRCREV = "230b4d8447a1b07bb92035e19ccec8c633103a08"
+SRCREV = "61924c04caa485af6d4be4663b4977f6ac226ca0"
 
 SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=https;branch=${SRCBRANCH}"
 
@@ -46,6 +46,7 @@ EXTRA_OEMAKE += "STM32MP_RAW_NAND=0"
 EXTRA_OEMAKE += "STM32MP_SPI_NOR=0"
 EXTRA_OEMAKE += "STM32MP_EMMC=0"
 EXTRA_OEMAKE += "STM32MP_SDMMC=1"
+EXTRA_OEMAKE += "STM32MP1_OPTEE_IN_SYSRAM=1"
 EXTRA_OEMAKE += "DTB_FILE_NAME=${TFA_DEVICETREE}.${DT_SUFFIX}"
 
 do_compile:prepend() {
@@ -68,12 +69,10 @@ do_compile:append() {
             BL32=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_HEADER}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
             BL32_EXTRA1=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGER}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
             BL32_EXTRA2=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGEABLE}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
-            FW_CONFIG=${S}/build/stm32mp1/${TFA_BUILD_TYPE}/fw-config.dtb \
             BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
             BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
     else
         oe_runmake fip 	\
-            FW_CONFIG=${S}/build/stm32mp1/${TFA_BUILD_TYPE}/fw-config.dtb \
             BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
             BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
     fi
