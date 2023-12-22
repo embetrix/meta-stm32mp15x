@@ -5,9 +5,16 @@ LICENSE = "BSD-2-Clause & GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://${S}/LICENSE.md;md5=daa2bcccc666345ab8940aab1315a4fa"
 
 SRC_URI = "git://github.com/OP-TEE/optee_test.git;protocol=https;branch=master"
-SRCREV = "1cf0e6d2bdd1145370033d4e182634458528579d"
+SRC_URI += "file://0001-no-error-deprecated-declarations.patch"
+SRC_URI += "file://0002-ta-os_test-skip-bget-test-when-pager-is-constrained-.patch"
+SRC_URI += "file://0003-regression-1013-lower-number-of-loops-when-pager-is-.patch"
+SRC_URI += "file://0004-ta-crypt-remove-CFG_SYSTEM_PTA-ifdef.patch"
+SRC_URI += "file://0005-regression-4012-4016-remove-CFG_SYSTEM_PTA-dependenc.patch"
+SRC_URI += "file://0006-xtest-remove-CFG_SECSTOR_TA_MGMT_PTA-dependency.patch"
 
-PV = "3.16.0+git${SRCPV}"
+SRCREV = "ab9863cc187724e54c032b738c28bd6e9460a4db"
+
+PV = "3.19.0+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
@@ -18,7 +25,7 @@ DEPENDS = "optee-client virtual/optee-os python3-pycryptodomex-native libgcc"
 DEPENDS += "openssl"
 DEPENDS += "python3-cryptography-native"
 
-inherit python3native
+inherit python3native cmake
 
 OPTEE_CLIENT_EXPORT = "${STAGING_DIR_HOST}${prefix}"
 TEEC_EXPORT         = "${STAGING_DIR_HOST}${prefix}"
@@ -35,19 +42,26 @@ EXTRA_OEMAKE = " TA_DEV_KIT_DIR=${TA_DEV_KIT_DIR} \
                  CFG_TEE_PLUGIN_LOAD_PATH=${TEE_PLUGIN_LOAD_PATH} \
                  DESTDIR=${D} \
                "
+EXTRA_OECMAKE = "-DOPTEE_TEST_SDK=${TA_DEV_KIT_DIR} \
+                 -DCFG_TEE_CLIENT_LOAD_PATH=${libdir} \
+                 -DCFG_TEE_PLUGIN_LOAD_PATH=${TEE_PLUGIN_LOAD_PATH} \
+                 "
 
 do_compile:prepend() {
     export CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_HOST}"
     export OPENSSL_MODULES=${STAGING_LIBDIR_NATIVE}/ossl-modules/
 }
 
-do_install () {
-    install -D -p -m0755 ${B}/out/xtest/xtest ${D}${bindir}/xtest
+do_compile:append() {
+    cd ${S}
+    oe_runmake ta
+}
 
+do_install:append () {
+    # install path should match the value set in optee-client/tee-supplicant
+    # default TEEC_LOAD_PATH is /lib
     mkdir -p ${D}${nonarch_base_libdir}/optee_armtz/
-    install -D -p -m0444 ${B}/out/ta/*/*.ta ${D}${nonarch_base_libdir}/optee_armtz/
-    mkdir -p ${D}${libdir}/tee-supplicant/plugins
-    install -D -p -m0444 ${B}/out/supp_plugin/*.plugin ${D}${libdir}/tee-supplicant/plugins/
+    install -D -p -m0444 ${S}/out/ta/*/*.ta ${D}${nonarch_base_libdir}/optee_armtz/
 }
 
 FILES:${PN} += "${nonarch_base_libdir}/optee_armtz/"

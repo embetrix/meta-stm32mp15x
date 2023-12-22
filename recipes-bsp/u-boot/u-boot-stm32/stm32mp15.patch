@@ -1,39 +1,69 @@
 diff --git a/configs/stm32mp15_defconfig b/configs/stm32mp15_defconfig
-index b4b2954273..ac8195b245 100644
+index be25aaa7885..d34fd8d7090 100644
 --- a/configs/stm32mp15_defconfig
 +++ b/configs/stm32mp15_defconfig
-@@ -4,13 +4,13 @@ CONFIG_TFABOOT=y
+@@ -2,14 +2,15 @@ CONFIG_ARM=y
+ CONFIG_ARCH_STM32MP=y
+ CONFIG_TFABOOT=y
  CONFIG_SYS_MALLOC_F_LEN=0x80000
- CONFIG_SYS_MEMTEST_START=0xc0000000
- CONFIG_SYS_MEMTEST_END=0xc4000000
 -CONFIG_ENV_OFFSET=0x900000
-+CONFIG_ENV_OFFSET=0x280000
  CONFIG_ENV_SECT_SIZE=0x40000
++CONFIG_ENV_OFFSET=0x280000
  CONFIG_DEFAULT_DEVICE_TREE="stm32mp157c-ev1"
- CONFIG_DDR_CACHEABLE_SIZE=0x10000000
+ CONFIG_SYS_PROMPT="STM32MP> "
++CONFIG_BOOTCOUNT_BOOTLIMIT=3
+ CONFIG_DDR_CACHEABLE_SIZE=0x8000000
  CONFIG_CMD_STM32KEY=y
- CONFIG_TARGET_ST_STM32MP15x=y
+ CONFIG_TARGET_ST_STM32MP15X=y
 -CONFIG_ENV_OFFSET_REDUND=0x940000
 +CONFIG_ENV_OFFSET_REDUND=0x2C0000
  CONFIG_CMD_STM32PROG=y
  # CONFIG_ARMV7_NONSEC is not set
- CONFIG_DISTRO_DEFAULTS=y
-@@ -162,3 +162,10 @@ CONFIG_FDT_FIXUP_PARTITIONS=y
- # CONFIG_LMB_USE_MAX_REGIONS is not set
- CONFIG_LMB_MEMORY_REGIONS=2
- CONFIG_LMB_RESERVED_REGIONS=16
+ CONFIG_SYS_LOAD_ADDR=0xc2000000
+@@ -43,6 +44,7 @@ CONFIG_CMD_USB=y
+ CONFIG_CMD_USB_MASS_STORAGE=y
+ CONFIG_SYS_DISABLE_AUTOLOAD=y
+ CONFIG_CMD_BMP=y
 +CONFIG_CMD_BOOTCOUNT=y
+ CONFIG_CMD_CACHE=y
+ CONFIG_CMD_EFIDEBUG=y
+ CONFIG_CMD_TIME=y
+@@ -54,19 +56,14 @@ CONFIG_CMD_EXT4_WRITE=y
+ CONFIG_CMD_LOG=y
+ CONFIG_CMD_UBI=y
+ CONFIG_OF_LIVE=y
+-CONFIG_ENV_IS_NOWHERE=y
++CONFIG_ENV_OVERWRITE=y
+ CONFIG_ENV_IS_IN_MMC=y
+-CONFIG_ENV_IS_IN_SPI_FLASH=y
+-CONFIG_ENV_IS_IN_UBI=y
+ CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
+-CONFIG_ENV_UBI_PART="UBI"
+-CONFIG_ENV_UBI_VOLUME="uboot_config"
+-CONFIG_ENV_UBI_VOLUME_REDUND="uboot_config_r"
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
+-CONFIG_SYS_MMC_ENV_DEV=-1
+-CONFIG_ENV_MMC_USE_DT=y
++# CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG is not set
+ CONFIG_TFTP_TSIZE=y
+ CONFIG_STM32_ADC=y
 +CONFIG_BOOTCOUNT_LIMIT=y
-+CONFIG_BOOTCOUNT_GENERIC=y
-+CONFIG_SYS_BOOTCOUNT_MAGIC=0xB001C041
-+CONFIG_BOOTCOUNT_BOOTLIMIT=3
-+CONFIG_SYS_BOOTCOUNT_ADDR=0x5C00A154
-+CONFIG_SYS_BOOTCOUNT_SINGLEWORD=y
+ CONFIG_CLK_SCMI=y
+ CONFIG_SET_DFU_ALT_INFO=y
+ CONFIG_USB_FUNCTION_FASTBOOT=y
+@@ -164,6 +161,7 @@ CONFIG_BMP_16BPP=y
+ CONFIG_BMP_24BPP=y
+ CONFIG_BMP_32BPP=y
+ CONFIG_WDT=y
++CONFIG_WDT_STM32MP=y
+ CONFIG_WDT_ARM_SMC=y
+ CONFIG_WDT_STM32MP=y
+ # CONFIG_BINMAN_FDT is not set
 diff --git a/include/configs/stm32mp15_common.h b/include/configs/stm32mp15_common.h
-index 58971cc656..df36d19f94 100644
+index bd8e16bc1b..ecd00327c2 100644
 --- a/include/configs/stm32mp15_common.h
 +++ b/include/configs/stm32mp15_common.h
-@@ -159,7 +159,7 @@
+@@ -123,7 +123,7 @@
   * 1M fdt, 1M script, 1M pxe and 1M for overlay
   * and the ramdisk at the end.
   */
@@ -43,18 +73,16 @@ index 58971cc656..df36d19f94 100644
  #define __SCRIPT_ADDR_R     __stringify(0xc4100000)
  #define __PXEFILE_ADDR_R    __stringify(0xc4200000)
 diff --git a/include/configs/stm32mp15_st_common.h b/include/configs/stm32mp15_st_common.h
-index c395f7f986..a1de1bc8e6 100644
+index e9bfbc482e..df9a9387b8 100644
 --- a/include/configs/stm32mp15_st_common.h
 +++ b/include/configs/stm32mp15_st_common.h
-@@ -27,22 +27,25 @@
-  * for nand or spi-nand boot, distro boot with ubifs on UBI partition
+@@ -28,21 +28,24 @@
   * for nor boot, distro boot on SD card = mmc0 ONLY !
   */
--#define ST_STM32MP1_BOOTCMD "bootcmd_stm32mp=" \
+ #define ST_STM32MP1_BOOTCMD "bootcmd_stm32mp=" \
 -	"echo \"Boot over ${boot_device}${boot_instance}!\";" \
 -	"if test ${boot_device} = serial || test ${boot_device} = usb;" \
 -	"then stm32prog ${boot_device} ${boot_instance}; " \
-+#define ST_STM32MP1_BOOTCMD "bootcmd_stm32mp=" \
 +	"if test ${boot_device} = serial || test ${boot_device} = usb; then " \
 +		"stm32prog ${boot_device} ${boot_instance}; " \
  	"else " \

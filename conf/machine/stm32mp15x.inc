@@ -58,7 +58,7 @@ MACHINE_EXTRA_RRECOMMENDS += "\
                     bootcount-reset \
                     u-boot-fw-utils \
                     linux-firmware-bcm43430 \
-                    ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'optee-test optee-examples optee-client opensc libp11', '', d)} \
+                    ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'optee-test optee-examples optee-client', '', d)} \
                     "
 
 WKS_FILE_DEPENDS ?= " \

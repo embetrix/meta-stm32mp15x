@@ -9,11 +9,11 @@ Subject: [PATCH] draw logo to show kernel splash in case of option quiet is
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index 42c72d051158..f8689832cdb1 100644
+index fa205be94a4b..c09bd1d3eeb4 100644
 --- a/drivers/video/fbdev/core/fbcon.c
 +++ b/drivers/video/fbdev/core/fbcon.c
-@@ -1044,7 +1044,7 @@ static void fbcon_init(struct vc_data *vc, int init)
- 	info = registered_fb[con2fb_map[vc->vc_num]];
+@@ -1005,7 +1005,7 @@ static void fbcon_init(struct vc_data *vc, int init)
+ 	info = fbcon_info_from_console(vc->vc_num);
  
  	if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
 -		logo_shown = FBCON_LOGO_DONTSHOW;
