@@ -6,7 +6,7 @@ SRC_URI = "git://github.com/STMicroelectronics/optee_os.git;protocol=ssh;branch=
 SRC_URI += "file://0001-ta-pkcs11-fix-ecc-generation-and-ecc-import.patch"
 SRC_URI += "file://0002-ta-pkcs11-rsa-public-key-import-calculate-CKA_MODULUS_BITS.patch"
 SRCBRANCH = "3.19.0-stm32mp"
-SRCREV    = "6b371887f9d6f327975a3b9e55f494ecb1ba71de"
+SRCREV    = "d0159bbfa266dcb0e12c01712e258b86e4d67f51"
 
 S = "${WORKDIR}/git"
 
@@ -30,13 +30,14 @@ OPTEE_ELF_SUFFIX = "elf"
 OPTEE_CORE_DEBUG ??="y"
 
 # default log level
-OPTEE_DEBUG_LOG_LEVEL ??= "3"
+OPTEE_DEBUG_LOG_LEVEL ??= "2"
 
 EXTRA_OEMAKE += "PLATFORM=${OPTEE_PLATFORM} CFG_EMBED_DTB_SOURCE_FILE=${OPTEE_DEVICETREE}"
 EXTRA_OEMAKE += "CROSS_COMPILE_core=${HOST_PREFIX}"
 EXTRA_OEMAKE += "CROSS_COMPILE_ta_arm64=${HOST_PREFIX}"
 EXTRA_OEMAKE += "${@bb.utils.contains('TUNE_FEATURES', 'aarch64', 'CFG_ARM64_core=y ta-targets=ta_arm64', 'CFG_ARM32_core=y CROSS_COMPILE_ta_arm32=${HOST_PREFIX}', d)}"
 EXTRA_OEMAKE += "NOWERROR=1"
+EXTRA_OEMAKE += "CFG_WITH_PAGER=y CFG_STM32MP1_OPTEE_IN_SYSRAM=1"
 EXTRA_OEMAKE += "CFG_IN_TREE_EARLY_TAS+=trusted_keys/f04a0fe7-1f5d-4b9b-abf7-619b85b4ce8c"
 EXTRA_OEMAKE += "CFG_IN_TREE_EARLY_TAS+=pkcs11/fd02c9da-306c-48c7-a49c-bbd827ae86ee"
 EXTRA_OEMAKE += "CFG_PKCS11_TA_HEAP_SIZE=131072"
