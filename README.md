@@ -41,7 +41,9 @@ Flash image on a SD Card using [bmap-tools](https://github.com/intel/bmap-tools)
 
 
 ```
-sudo bmaptool copy build/tmp/deploy/images/stm32mp157f-dk2/stm32mp15x-demo-image-stm32mp157f-dk2.wic.gz /dev/mmcblk0
+sudo bmaptool copy \
+    build/tmp/deploy/images/stm32mp157f-dk2/stm32mp15x-demo-image-stm32mp157f-dk2.wic.gz \
+    /dev/mmcblk0
 ```
 
 ## Run
@@ -146,7 +148,6 @@ Set the new Key path in a Bitbake Variable put in your local.conf:
 
 ```
 SECBOOT_SIGN_KEY = "/path/to/secure-boot-mykey.pem"
-
 ```
 
 The hashes of public key are automatically generated under:
@@ -164,6 +165,30 @@ build/tmp/deploy/images/stm32mp157f-dk2/u-boot-fuse-prog.txt
 > **Note**
 
 We provide services to integrate HSM signing to secure boot and improve the security of your product.
+
+
+## Wireless LAN
+
+to enable Wifi Manually you should set */etc/wpa_supplicant.conf* file e.g:
+
+```
+network={
+        ssid="embetrix-2.4"
+        psk=315089e3db2ce18ad94caba8a3b71f35947487d1c7913a44130e7ec2f91905040
+}
+```
+
+and start wpa_supplicant:
+
+```
+wpa_supplicant -c /etc/wpa_supplicant.conf -i wlan0 -B
+```
+
+you can then acquire an IP address using for example:
+
+```
+udhcpc -i wlan0
+```
 
 ## List of tested boards:
 
