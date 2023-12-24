@@ -11,16 +11,16 @@ RDEPENDS:${PN} += "python3-core python3-pycryptodomex"
 
 do_install () {
 
-	install -d ${D}${bindir}
-	install -m 0755 ${S}/stm32-sign.py   ${D}${bindir}/stm32-sign
-	install -m 0755 ${S}/ecdsa-sha256.py ${D}${bindir}/ecdsa-sha256
+    install -d ${D}${bindir}
+    install -m 0755 ${S}/stm32-sign.py   ${D}${bindir}/stm32-sign
+    install -m 0755 ${S}/ecdsa-sha256.py ${D}${bindir}/ecdsa-sha256
 }
 
 do_install:append:class-native() {
 
-	# use yocto native python instead of host python
-	sed -i 's|/usr/bin/env python3|'"${RECIPE_SYSROOT_NATIVE}/${bindir_native}"'/python3-native/python3|g' ${D}${bindir}/stm32-sign
-	sed -i 's|/usr/bin/env python3|'"${RECIPE_SYSROOT_NATIVE}/${bindir_native}"'/python3-native/python3|g' ${D}${bindir}/ecdsa-sha256
+    # use yocto native python instead of host python
+    sed -i 's|/usr/bin/env python3|'"${RECIPE_SYSROOT_NATIVE}/${bindir_native}"'/python3-native/python3|g' ${D}${bindir}/stm32-sign
+    sed -i 's|/usr/bin/env python3|'"${RECIPE_SYSROOT_NATIVE}/${bindir_native}"'/python3-native/python3|g' ${D}${bindir}/ecdsa-sha256
 }
 
 FILES:${PN} = "${bindir}"

@@ -7,7 +7,7 @@ SRC_URI = "gitsm://git@github.com/lvgl/lv_port_linux_frame_buffer;protocol=https
            file://0001-lvgl-set-resolution.patch \
            file://0002-lvgl-set-input-dev.patch  \
            file://lvgl-demo.service              \
-		   "
+           "
 SRCREV = "927d052510a240d0c1d14928fb6d01a2363ebce9"
 
 S = "${WORKDIR}/git"
@@ -17,8 +17,8 @@ DEPENDS = "libinput"
 
 do_install() {
 
-	install -d ${D}${bindir}
-	install -m 0755 ${S}/build/bin/demo ${D}${bindir}/lvgl-demo
+    install -d ${D}${bindir}
+    install -m 0755 ${S}/build/bin/demo ${D}${bindir}/lvgl-demo
 }
 
 FILES:${PN} = "${bindir}"
@@ -30,6 +30,6 @@ SYSTEMD_PACKAGES = "${PN}"
 
 do_install:append() {
 
-	install -d ${D}${systemd_unitdir}/system
-	install -m 0644 ${WORKDIR}/lvgl-demo.service ${D}${systemd_unitdir}/system/
+    install -d ${D}${systemd_unitdir}/system
+    install -m 0644 ${WORKDIR}/lvgl-demo.service ${D}${systemd_unitdir}/system/
 }
