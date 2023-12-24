@@ -7,12 +7,19 @@ inherit deploy
 
 PROVIDES += "virtual/trusted-firmware-a"
 
+SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=https;branch=${SRCBRANCH}"
 SRCBRANCH = "v2.8-stm32mp"
 SRCREV = "61924c04caa485af6d4be4663b4977f6ac226ca0"
 
-SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=https;branch=${SRCBRANCH}"
+# Add MBEDTLS support required for TRUSTED_BOARD_BOOT
+MBEDTLS_DIR = "${WORKDIR}/mbedtls"
+# MBEDTLS v2.28.0
+SRC_URI += "git://github.com/ARMmbed/mbedtls.git;protocol=https;destsuffix=${MBEDTLS_DIR};nobranch=1;name=mbedtls"
+SRCREV_mbedtls = "8b3f26a5ac38d4fdccbc5c5366229f3e01dafcc0"
+LIC_FILES_CHKSUM += "file://${MBEDTLS_DIR}/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
+LICENSE_MBEDTLS = "Apache-2.0"
 
-DEPENDS += "dtc-native openssl-native"
+DEPENDS += "dtc-native openssl-native util-linux-native tf-a-stm32mp-tools-native stm32mp-keygen-native"
 
 do_compile[depends] += " \
     virtual/bootloader:do_deploy \
@@ -49,33 +56,15 @@ EXTRA_OEMAKE += "STM32MP_SDMMC=1"
 EXTRA_OEMAKE += "STM32MP1_OPTEE_IN_SYSRAM=1"
 EXTRA_OEMAKE += "DTB_FILE_NAME=${TFA_DEVICETREE}.${DT_SUFFIX}"
 
+# FIP signing configuration
+EXTRA_OEMAKE += "TRUSTED_BOARD_BOOT=1"
+EXTRA_OEMAKE += "MBEDTLS_DIR=${MBEDTLS_DIR}"
+
 do_compile:prepend() {
 
     unset LDFLAGS
     unset CFLAGS
     unset CPPFLAGS
-
-    sed -i '/^INCLUDE_PATHS/ s,$, \${BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
-    sed -i '/^OPENSSL_DIR/c\\OPENSSL_DIR := \${RECIPE_SYSROOT_NATIVE}/usr' ${S}/tools/fiptool/Makefile
-    sed -i '/^LDLIBS/ s,$,  \-Wl\,\-R\${RECIPE_SYSROOT_NATIVE}/usr/lib,' ${S}/tools/fiptool/Makefile
-
-}
-
-# Generate FIP
-do_compile:append() {
-
-    if ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'true', 'false', d)}; then
-        oe_runmake fip 	\
-            BL32=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_HEADER}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
-            BL32_EXTRA1=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGER}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
-            BL32_EXTRA2=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGEABLE}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
-            BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
-            BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
-    else
-        oe_runmake fip 	\
-            BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
-            BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
-    fi
 }
 
 do_install() {
@@ -84,17 +73,74 @@ do_install() {
     install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${D}/boot
 }
 
+do_tfa_sign() {
+
+    stm32-sign  -k "${SECBOOT_SIGN_KEY}" \
+                -s ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} \
+                -o ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX}.sign
+
+}
+
+do_fip_sign() {
+
+    install -d  ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs
+    cert_create --rot-key "${SECBOOT_SIGN_KEY}" -n                                                              \
+                --tfw-nvctr          0                                                                          \
+                --ntfw-nvctr         0                                                                          \
+                --key-alg            ecdsa                                                                      \
+                --hash-alg           sha256                                                                     \
+                --tos-fw             ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_HEADER}-${OPTEE_CONF}.${OPTEE_SUFFIX}    \
+                --tos-fw-extra1      ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGER}-${OPTEE_CONF}.${OPTEE_SUFFIX}     \
+                --tos-fw-extra2      ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGEABLE}-${OPTEE_CONF}.${OPTEE_SUFFIX}  \
+                --nt-fw              ${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin                            \
+                --hw-config          ${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb                                  \
+                --fw-config          ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/fdts/${TFA_DEVICETREE}-fw-config.dtb \
+                --tos-fw-cert        ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/tee-header_v2.crt              \
+                --trusted-key-cert   ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/trusted-key-cert.key-crt       \
+                --tos-fw-key-cert    ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/tee-header_v2.key-crt          \
+                --nt-fw-cert         ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/u-boot.crt                     \
+                --nt-fw-key-cert     ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/u-boot.key-crt                 \
+                --stm32mp-cfg-cert   ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/stm32mp_cfg_cert.crt
+
+    fiptool create ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${FIP_BASENAME}.bin.sign                               \
+                --tos-fw             ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_HEADER}-${OPTEE_CONF}.${OPTEE_SUFFIX}    \
+                --tos-fw-extra1      ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGER}-${OPTEE_CONF}.${OPTEE_SUFFIX}     \
+                --tos-fw-extra2      ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGEABLE}-${OPTEE_CONF}.${OPTEE_SUFFIX}  \
+                --nt-fw              ${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin                            \
+                --hw-config          ${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb                                  \
+                --fw-config          ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/fdts/${TFA_DEVICETREE}-fw-config.dtb \
+                --tos-fw-cert        ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/tee-header_v2.crt              \
+                --trusted-key-cert   ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/trusted-key-cert.key-crt       \
+                --tos-fw-key-cert    ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/tee-header_v2.key-crt          \
+                --nt-fw-cert         ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/u-boot.crt                     \
+                --nt-fw-key-cert     ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/u-boot.key-crt                 \
+                --stm32mp-cfg-cert   ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/stm32mp_cfg_cert.crt           
+}
+
 do_deploy() {
                                           
     install -d ${DEPLOYDIR}
-    install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${DEPLOYDIR}/
-    install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${FIP_BASENAME}.bin ${DEPLOYDIR}/${FIP_BASENAME}-${MACHINE}.bin
+    install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX}.sign ${DEPLOYDIR}/
+    install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${FIP_BASENAME}.bin.sign ${DEPLOYDIR}/${FIP_BASENAME}-${MACHINE}.bin.sign
     cd ${DEPLOYDIR}/
-    ln -sf  ${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${TF_A_BASENAME}.${TF_A_SUFFIX}
-    ln -sf  ${FIP_BASENAME}-${MACHINE}.bin ${FIP_BASENAME}.bin
+    ln -sf  ${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX}.sign ${TF_A_BASENAME}.${TF_A_SUFFIX}
+    ln -sf  ${FIP_BASENAME}-${MACHINE}.bin.sign ${FIP_BASENAME}.bin
 }
 
-addtask deploy before do_package after do_compile
+do_deploy:append() {
+
+    openssl ec -in ${SECBOOT_SIGN_KEY}  -outform PEM -out ${DEPLOYDIR}/secureboot-pubkey.pem -pubout
+    ecdsa-sha256 --public-key=${DEPLOYDIR}/secureboot-pubkey.pem \
+                 --binhash-file=${DEPLOYDIR}/secureboot-pubhash.bin
+    
+    # Generate u-boot cmd to fuse public key hashes into OTP
+    echo fuse prog -y 0 0x18 $(hexdump -e '/4 "0x"' -e '/1 "%x"' -e '" "' ${DEPLOYDIR}/secureboot-pubhash.bin) > ${DEPLOYDIR}/u-boot-fuse-prog.txt
+}
+
+addtask do_tfa_sign after do_compile
+addtask do_fip_sign after do_compile
+addtask deploy before do_package after do_fip_sign
+addtask deploy before do_package after do_tfa_sign
 
 FILES:${PN} = "/boot"
 

@@ -72,3 +72,6 @@ WKS_FILE_DEPENDS ?= " \
 WKS_FILE ?= "stm32mp15x.wks"
 
 IMAGE_FSTYPES  ?= "tar.bz2 wic.gz wic.bmap"
+
+# Secure Boot signing key
+SECBOOT_SIGN_KEY = "${STM32MP15X_BASE}/conf/keys/secure-boot/secure-boot-devkey.pem"
