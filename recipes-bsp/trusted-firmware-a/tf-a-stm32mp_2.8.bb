@@ -3,7 +3,7 @@ SECTION = "bootloaders"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
 
-inherit deploy stm32mp15x-sign
+inherit deploy
 
 PROVIDES += "virtual/trusted-firmware-a"
 
@@ -57,8 +57,9 @@ EXTRA_OEMAKE += "STM32MP1_OPTEE_IN_SYSRAM=1"
 EXTRA_OEMAKE += "DTB_FILE_NAME=${TFA_DEVICETREE}.${DT_SUFFIX}"
 
 # FIP signing configuration
-EXTRA_OEMAKE += "TRUSTED_BOARD_BOOT=1"
 EXTRA_OEMAKE += "MBEDTLS_DIR=${MBEDTLS_DIR}"
+EXTRA_OEMAKE += "${@bb.utils.contains('SECBOOT_SIGN', '1', 'TRUSTED_BOARD_BOOT=1', '', d)}"
+inherit ${@bb.utils.contains('SECBOOT_SIGN', '1', 'stm32mp15x-sign', '', d)}
 
 do_compile:prepend() {
 
@@ -67,14 +68,31 @@ do_compile:prepend() {
     unset CPPFLAGS
 }
 
+# Generate FIP
+do_compile:append() {
+
+    if ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'true', 'false', d)}; then
+        oe_runmake fip 	\
+            BL32=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_HEADER}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
+            BL32_EXTRA1=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGER}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
+            BL32_EXTRA2=${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGEABLE}-${OPTEE_CONF}.${OPTEE_SUFFIX} \
+            BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
+            BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
+    else
+        oe_runmake fip 	\
+            BL33=${DEPLOY_DIR_IMAGE}/u-boot-nodtb-${MACHINE}.bin \
+            BL33_CFG=${DEPLOY_DIR_IMAGE}/u-boot-${MACHINE}.dtb
+    fi
+}
+
 do_install() {
-                                          
+
     install -d ${D}/boot
     install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${D}/boot
 }
 
 do_deploy() {
-                                          
+
     install -d ${DEPLOYDIR}
     install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} ${DEPLOYDIR}/
     install -m 644 ${S}/build/stm32mp1/${TFA_BUILD_TYPE}/${FIP_BASENAME}.bin ${DEPLOYDIR}/${FIP_BASENAME}-${MACHINE}.bin
@@ -83,6 +101,7 @@ do_deploy() {
     ln -sf  ${FIP_BASENAME}-${MACHINE}.bin ${FIP_BASENAME}.bin
 }
 
+addtask deploy before do_package after do_compile
 
 FILES:${PN} = "/boot"
 

@@ -39,7 +39,7 @@ do_fip_sign() {
                 --nt-fw-key-cert     ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/u-boot.key-crt                 \
                 --stm32mp-cfg-cert   ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/certs/stm32mp_cfg_cert.crt
 
-    fiptool create ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${FIP_BASENAME}.bin                              \
+    fiptool update ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${FIP_BASENAME}.bin                                    \
                 --tos-fw             ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_HEADER}-${OPTEE_CONF}.${OPTEE_SUFFIX}    \
                 --tos-fw-extra1      ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGER}-${OPTEE_CONF}.${OPTEE_SUFFIX}     \
                 --tos-fw-extra2      ${DEPLOY_DIR_IMAGE}/optee/${OPTEE_PAGEABLE}-${OPTEE_CONF}.${OPTEE_SUFFIX}  \

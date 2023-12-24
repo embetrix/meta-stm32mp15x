@@ -24,7 +24,7 @@ do_compile:prepend() {
 }
 
 do_compile() {
-                                          
+
     oe_runmake certtool fiptool
 }
 
