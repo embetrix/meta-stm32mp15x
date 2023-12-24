@@ -7,7 +7,7 @@ SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=htt
 SRCBRANCH = "v2.8-stm32mp"
 SRCREV = "61924c04caa485af6d4be4663b4977f6ac226ca0"
 
-DEPENDS += "openssl"
+DEPENDS += "dtc-native openssl-native"
 
 S = "${WORKDIR}/git"
 
