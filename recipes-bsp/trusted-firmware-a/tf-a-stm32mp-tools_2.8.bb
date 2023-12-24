@@ -15,9 +15,8 @@ EXTRA_OEMAKE += "PLAT=stm32mp1"
 
 do_compile:prepend() {
 
-    sed -i '/^INCLUDE_PATHS/ s,$, \${BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
-    sed -i '/^OPENSSL_DIR/c\\OPENSSL_DIR := \${RECIPE_SYSROOT_NATIVE}/usr' ${S}/tools/fiptool/Makefile
-    sed -i '/^LDLIBS/ s,$,  \-Wl\,\-R\${RECIPE_SYSROOT_NATIVE}/usr/lib,' ${S}/tools/fiptool/Makefile
+    sed -i '/^LDLIBS/ s,$, \$\{BUILD_LDFLAGS},' ${S}/tools/fiptool/Makefile
+    sed -i '/^INCLUDE_PATHS/ s,$, \$\{BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
 }
 
 do_compile() {
