@@ -1,0 +1,42 @@
+diff --git a/lv_conf.h b/lv_conf.h
+index 6bfe50f..e83dc55 100644
+--- a/lv_conf.h
++++ b/lv_conf.h
+@@ -24,7 +24,7 @@
+  *====================*/
+ 
+ /*Color depth: 1 (1 byte per pixel), 8 (RGB332), 16 (RGB565), 32 (ARGB8888)*/
+-#define LV_COLOR_DEPTH 32
++#define LV_COLOR_DEPTH 16
+ 
+ /*Swap the 2 bytes of RGB565 color. Useful if the display has an 8-bit interface (e.g. SPI)*/
+ #define LV_COLOR_16_SWAP 0
+diff --git a/main.c b/main.c
+index 33cd734..2380d33 100644
+--- a/main.c
++++ b/main.c
+@@ -29,9 +29,10 @@ int main(void)
+     lv_disp_drv_init(&disp_drv);
+     disp_drv.draw_buf   = &disp_buf;
+     disp_drv.flush_cb   = fbdev_flush;
+-    disp_drv.hor_res    = 800;
+-    disp_drv.ver_res    = 480;
+-    lv_disp_drv_register(&disp_drv);
++    disp_drv.hor_res    = 480;
++    disp_drv.ver_res    = 800;
++    disp_drv.sw_rotate  = 1;
++    lv_disp_t *lv_displ=lv_disp_drv_register(&disp_drv);
+ 
+     evdev_init();
+     static lv_indev_drv_t indev_drv_1;
+@@ -53,6 +54,9 @@ int main(void)
+     /*Create a Demo*/
+     lv_demo_widgets();
+ 
++    /*Rotate Display*/
++    lv_disp_set_rotation(lv_displ, LV_DISP_ROT_90);
++
+     /*Handle LitlevGL tasks (tickless mode)*/
+     while(1) {
+         lv_timer_handler();
+

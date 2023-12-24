@@ -1,0 +1,13 @@
+[Unit]
+Description=lvgl demo service
+Conflicts=getty@tty1.service
+
+[Service]
+# Starting this service too early
+# trigger udev on input/graphics
+ExecStartPre=/bin/udevadm trigger --action="add" --settle --subsystem-match="graphics" --subsystem-match="input"
+ExecStart=/usr/bin/lvgl-demo
+Restart=on-failure
+
+[Install]
+WantedBy=basic.target

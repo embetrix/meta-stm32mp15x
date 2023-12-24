@@ -13,6 +13,7 @@ IMAGE_INSTALL += "\
     curl \
     strace \
     gdbserver \
+    lvgl-demo \
     "
 
 inherit core-image
