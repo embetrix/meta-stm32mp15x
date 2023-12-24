@@ -1,6 +1,6 @@
-SUMMARY = "LVGL demo for frame buffer device"
+SUMMARY  = "LVGL demo for frame buffer device"
 HOMEPAGE = "https://lvgl.io"
-LICENSE = "MIT"
+LICENSE  = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=802d3d83ae80ef5f343050bf96cce3a4"
 
 SRC_URI = "gitsm://git@github.com/lvgl/lv_port_linux_frame_buffer;protocol=https;branch=master \
@@ -8,19 +8,17 @@ SRC_URI = "gitsm://git@github.com/lvgl/lv_port_linux_frame_buffer;protocol=https
            file://0002-lvgl-set-input-dev.patch  \
            file://lvgl-demo.service              \
 		   "
-SRCREV = "23d0db627894ec15743bb5eb7126d55404c5aa86"
+SRCREV = "927d052510a240d0c1d14928fb6d01a2363ebce9"
 
 S = "${WORKDIR}/git"
 PV = "+git${SRCPV}"
 
 DEPENDS = "libinput"
 
-CFLAGS:append  = " -I${S}"
-
 do_install() {
 
 	install -d ${D}${bindir}
-	install -m 0755 ${S}/demo ${D}${bindir}/lvgl-demo
+	install -m 0755 ${S}/build/bin/demo ${D}${bindir}/lvgl-demo
 }
 
 FILES:${PN} = "${bindir}"
