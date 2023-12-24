@@ -36,6 +36,6 @@ local_conf_header:
     PATCHRESOLVE = "noop"
     INHERIT += "rm_work"
     EXTRA_IMAGE_FEATURES ?= "debug-tweaks"
-    DISTRO_FEATURES += "systemd"
+    DISTRO_FEATURES += "systemd wifi"
     VIRTUAL-RUNTIME_init_manager = "systemd"
     DISTRO_FEATURES_BACKFILL_CONSIDERED += "sysvinit"
