@@ -35,7 +35,7 @@ or using kas docker container:
 kas-container build kas-stm32mp15x.yml
 ```
 
-## Flash & Run
+## Flash SD Card
 
 Flash image on a SD Card using [bmap-tools](https://github.com/intel/bmap-tools):
 
@@ -43,6 +43,8 @@ Flash image on a SD Card using [bmap-tools](https://github.com/intel/bmap-tools)
 ```
 sudo bmaptool copy build/tmp/deploy/images/stm32mp157f-dk2/stm32mp15x-demo-image-stm32mp157f-dk2.wic.gz /dev/mmcblk0
 ```
+
+## Run
 
 Insert your SD Card into the compatible device and you should see in your serial console:
 
@@ -132,15 +134,15 @@ root@stm32mp157f-dk2:~#
 
 ## Secure Boot:
 
-Secure Boot Signing of **tf-a** an **fip** binaries is enabled by default using a devel key 
+Secure Boot Signing of **tf-a** an **fip** binaries is enabled by default using a development key 
 
-we recommend to generate your own key: 
+we recommend that you generate your own key using: 
 
 ```
 openssl ecparam -name prime256v1 -genkey -out /path/to/secure-boot-mykey.pem
 ```
 
-Set the new Key Path as Bitbake Variable in your local.conf:
+Set the new Key path in a Bitbake Variable put in your local.conf:
 
 ```
 SECBOOT_SIGN_KEY = "/path/to/secure-boot-mykey.pem"
@@ -153,7 +155,7 @@ The hashes of public key are automatically generated under:
 build/tmp/deploy/images/stm32mp157f-dk2/secureboot-pubhash.bin
 ```
 
-The corresponding u-boot fuse prog commands are also generated under and can be fused using:
+The corresponding u-boot fuse prog commands are also generated and can be fused using:
 
 ```
 build/tmp/deploy/images/stm32mp157f-dk2/u-boot-fuse-prog.txt
