@@ -153,7 +153,7 @@ The hashes of public key are automatically generated under:
 build/tmp/deploy/images/stm32mp157f-dk2/secureboot-pubhash.bin
 ```
 
-The corresponding u-boot fuse prog commands are also generated under:
+The corresponding u-boot fuse prog commands are also generated under and can be fused using:
 
 ```
 build/tmp/deploy/images/stm32mp157f-dk2/u-boot-fuse-prog.txt
