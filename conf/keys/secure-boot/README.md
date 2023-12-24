@@ -15,7 +15,6 @@ Set the new Key Bitbake Variable in your local.conf:
 
 ```
 SECBOOT_SIGN_KEY = "/path/to/secure-boot-mykey.pem"
-
 ```
 
 > **Note**

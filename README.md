@@ -26,13 +26,13 @@ branch: same dedicated branch as meta-stm32mp15x
 This layer can be integrated in your layers or built standalone using [kas-tool](https://github.com/siemens/kas):
 
 ```
-kas build kas-stm32mp15x.yml
+KAS_MACHINE=stm32mp157f-dk2 kas build kas-stm32mp15x.yml
 ```
 
 or using kas docker container:
 
 ```
-kas-container build kas-stm32mp15x.yml
+KAS_MACHINE=stm32mp157f-dk2 kas-container build kas-stm32mp15x.yml
 ```
 
 ## Flash SD Card
@@ -164,7 +164,8 @@ build/tmp/deploy/images/stm32mp157f-dk2/u-boot-fuse-prog.txt
 
 > **Note**
 
-We provide services to integrate HSM signing to secure boot and improve the security of your product.
+We provide services to integrate HSM signing to secure boot, extend it to the applications
+and improve the overall security of your product.
 
 
 ## Wireless LAN
