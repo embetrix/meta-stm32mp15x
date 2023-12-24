@@ -1,4 +1,4 @@
-
+#####################################################################################
 #
 # Brief	        : Sign  tf-a and fip binaries for STM32MP15x
 #
@@ -7,6 +7,7 @@
 # 
 # Author        : ayoub.zaki@embetrix.com
 #
+#####################################################################################
 
 DEPENDS += "openssl-native util-linux-native tf-a-stm32mp-tools-native stm32mp-keygen-native"
 
