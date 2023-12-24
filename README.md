@@ -50,8 +50,12 @@ Insert your SD Card into the compatible device and you should see in your serial
 NOTICE:  CPU: STM32MP157FAC Rev.Z
 NOTICE:  Model: STMicroelectronics STM32MP157F-DK2 Discovery Board
 NOTICE:  Board: MB1272 Var4.0 Rev.C-03
-NOTICE:  BL2: v2.8-stm32mp1-r1.1(release):v2.8-stm32mp-r1.1-3-g61924c04c-dirty(61924c04)
+NOTICE:  Bootrom authentication failed
+NOTICE:  BL2: v2.8-stm32mp1-r1.1(release):v2.8-stm32mp-r1.1-3-g61924c04c(61924c04)
 NOTICE:  BL2: Built : 13:07:51, Oct 18 2023
+NOTICE:  TRUSTED_BOARD_BOOT support enabled
+NOTICE:  ROTPK is not deployed on platform. Skipping ROTPK verification.
+NOTICE:  ROTPK is not deployed on platform. Skipping ROTPK verification.
 NOTICE:  BL2: Booting BL32
 optee optee: OP-TEE: revision 3.19 (d0159bbf)
 
@@ -125,6 +129,39 @@ Poky (Yocto Project Reference Distro) 4.0.15 stm32mp157f-dk2 ttySTM0
 stm32mp157f-dk2 login: root
 root@stm32mp157f-dk2:~#
 ```
+
+## Secure Boot:
+
+Secure Boot Signing of **tf-a** an **fip** binaries is enabled by default using a devel key 
+
+we recommend to generate your own key: 
+
+```
+openssl ecparam -name prime256v1 -genkey -out /path/to/secure-boot-mykey.pem
+```
+
+Set the new Key Path as Bitbake Variable in your local.conf:
+
+```
+SECBOOT_SIGN_KEY = "/path/to/secure-boot-mykey.pem"
+
+```
+
+The hashes of public key are automatically generated under:
+
+```
+build/tmp/deploy/images/stm32mp157f-dk2/secureboot-pubhash.bin
+```
+
+The corresponding u-boot fuse prog commands are also generated under:
+
+```
+build/tmp/deploy/images/stm32mp157f-dk2/u-boot-fuse-prog.txt
+```
+
+> **Note**
+
+We provide services to integrate HSM signing to secure boot and improve the security of your product.
 
 ## List of tested boards:
 
