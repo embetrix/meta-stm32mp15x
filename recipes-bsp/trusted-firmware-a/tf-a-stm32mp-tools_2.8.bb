@@ -15,13 +15,17 @@ EXTRA_OEMAKE += "PLAT=stm32mp1"
 
 do_compile:prepend() {
 
-    sed -i '/^LDLIBS/ s,$, \$\{BUILD_LDFLAGS},' ${S}/tools/fiptool/Makefile
+    sed -i '/^LIB_DIR/ s,$, \$\{BUILD_LDFLAGS},'      ${S}/tools/cert_create/Makefile
+    sed -i '/^INC_DIR/ s,$, \$\{BUILD_CFLAGS},'       ${S}/tools/cert_create/Makefile
+
+    sed -i '/^LDLIBS/ s,$, \$\{BUILD_LDFLAGS},'       ${S}/tools/fiptool/Makefile
     sed -i '/^INCLUDE_PATHS/ s,$, \$\{BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
+
 }
 
 do_compile() {
                                           
-    oe_runmake certtool fiptool enctool
+    oe_runmake certtool fiptool
 }
 
 do_install() {
@@ -30,7 +34,6 @@ do_install() {
 
     install -m 0755 ${B}/tools/fiptool/fiptool         ${D}${bindir}
     install -m 0755 ${B}/tools/cert_create/cert_create ${D}${bindir}
-    install -m 0755 ${B}/tools/encrypt_fw/encrypt_fw   ${D}${bindir}
 }
 
 
