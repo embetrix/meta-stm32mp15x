@@ -156,7 +156,7 @@ SECBOOT_SIGN_KEY = "/path/to/secure-boot-mykey.pem"
 The hashes of public key are automatically generated under:
 
 ```
-build/tmp/deploy/images/stm32mp157f-dk2/secureboot-pubhash.bin
+build/tmp/deploy/images/stm32mp157f-dk2/secureboot-pubkey-hash.bin
 ```
 
 The corresponding u-boot fuse prog commands are also generated and can be fused using:
