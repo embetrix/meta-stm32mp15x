@@ -2,7 +2,7 @@
 
 > **Warning**
 
-> The present key **secure-boot-devkey.pem** is just given as an example and should not be used for production !
+> The present key **secure-boot.pem** is just given as an example and should not be used for production !
 
 Generate you own key using *openssl*:
 
