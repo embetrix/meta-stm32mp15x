@@ -20,7 +20,7 @@ UBOOT_DTB_LOADADDRESS = "0xC4000000"
 SERIAL_CONSOLES       = "115200;ttySTM0"
 SERIAL_CONSOLES_CHECK = "${SERIAL_CONSOLES}"
 
-KERNEL_CLASSES  += "kernel-fitimage"
+KERNEL_CLASSES  += "kernel-fitimage uboot-sign"
 KERNEL_IMAGETYPE = "fitImage"
 
 # Trused Firmware
@@ -76,3 +76,11 @@ IMAGE_FSTYPES  ?= "tar.bz2 wic.gz wic.bmap"
 # Secure Boot signing
 SECBOOT_SIGN     ?= "1"
 SECBOOT_SIGN_KEY ?= "${STM32MP15X_BASE}/conf/keys/secure-boot/secure-boot-devkey.pem"
+
+# fitImage Signing
+UBOOT_SIGN_ENABLE     ?= "1"
+UBOOT_SIGN_KEYDIR     ?= "${STM32MP15X_BASE}/conf/keys/ubootfit"
+UBOOT_SIGN_KEYNAME    ?= "ubootfit"
+UBOOT_MKIMAGE_DTCOPTS ?= "-I dts -O dtb -p 2000"
+FIT_HASH_ALG = "sha256"
+FIT_SIGN_ALG = "rsa2048"

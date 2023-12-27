@@ -1,0 +1,45 @@
+/dts-v1/;
+
+/ {
+	description = "dummy kernel image with one FDT blob";
+	#address-cells = <1>;
+
+	images {
+		kernel {
+			data = /incbin/("dummy-kernel.bin");
+			type = "kernel_noload";
+			arch = "sandbox";
+			os = "linux";
+			compression = "none";
+			load = <0x4>;
+			entry = <0x8>;
+			kernel-version = <1>;
+			hash-1 {
+				algo = "__FIT_HASH_ALG__";
+			};
+		};
+		fdt-1 {
+			description = "snow";
+			data = /incbin/("dummy-kernel.dtb");
+			type = "flat_dt";
+			arch = "sandbox";
+			compression = "none";
+			fdt-version = <1>;
+			hash-1 {
+				algo = "__FIT_HASH_ALG__";
+			};
+		};
+	};
+	configurations {
+		default = "conf-1";
+		conf-1 {
+			kernel = "kernel";
+			fdt = "fdt-1";
+			signature {
+				algo = "__FIT_HASH_ALG__,__FIT_SIGN_ALG__";
+				key-name-hint = "__KEY_NAME_HINT__";
+				sign-images = "fdt", "kernel";
+			};
+		};
+	};
+};

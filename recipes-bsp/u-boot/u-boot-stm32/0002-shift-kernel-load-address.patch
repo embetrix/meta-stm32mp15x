@@ -1,0 +1,26 @@
+From 0c4a60782d0863240e0ed579e107c5ffd1e5aac5 Mon Sep 17 00:00:00 2001
+From: Ayoub Zaki <ayoub.zaki@embetrix.com>
+Date: Wed, 27 Dec 2023 15:06:02 +0700
+Subject: [PATCH 2/4] shift kernel load address
+
+Signed-off-by: Ayoub Zaki <ayoub.zaki@embetrix.com>
+---
+ include/configs/stm32mp15_common.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/stm32mp15_common.h b/include/configs/stm32mp15_common.h
+index bd8e16bc1b9..ecd00327c29 100644
+--- a/include/configs/stm32mp15_common.h
++++ b/include/configs/stm32mp15_common.h
+@@ -123,7 +123,7 @@
+  * 1M fdt, 1M script, 1M pxe and 1M for overlay
+  * and the ramdisk at the end.
+  */
+-#define __KERNEL_ADDR_R     __stringify(0xc2000000)
++#define __KERNEL_ADDR_R     __stringify(0xc8000000)
+ #define __FDT_ADDR_R        __stringify(0xc4000000)
+ #define __SCRIPT_ADDR_R     __stringify(0xc4100000)
+ #define __PXEFILE_ADDR_R    __stringify(0xc4200000)
+-- 
+2.34.1
+
