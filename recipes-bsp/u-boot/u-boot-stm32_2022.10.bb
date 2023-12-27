@@ -10,13 +10,13 @@ DEPENDS += "python3-setuptools-native"
 SRCBRANCH = "v2022.10-stm32mp"
 SRCREV = "2c7a6accfa78d34c402fa262bb53f0b952198882"
 
-SRC_URI  = "git://github.com/STMicroelectronics/u-boot.git;protocol=https;branch=${SRCBRANCH}"
-SRC_URI += "file://0001-add-signature-nodes-to-dts-files.patch
-SRC_URI += "file://0002-shift-kernel-load-address.patch
-SRC_URI += "file://0003-rework-CONFIG_EXTRA_ENV_SETTINGS.patch
-SRC_URI += "file://0004-rework-stm32mp15x-defconfig.patch
-SRC_URI += "file://template.its"
-SRC_URI += "file://embetrix.png"
+SRC_URI  = "git://github.com/STMicroelectronics/u-boot.git;protocol=https;branch=${SRCBRANCH} \
+            file://0001-add-signature-nodes-to-dts-files.patch \
+            file://0002-shift-kernel-load-address.patch        \
+            file://0003-rework-CONFIG_EXTRA_ENV_SETTINGS.patch \
+            file://0004-rework-stm32mp15x-defconfig.patch      \
+            file://template.its                                \
+            file://embetrix.png"
 
 UBOOT_INITIAL_ENV = "u-boot-initial-env"
 
@@ -27,7 +27,7 @@ addtask add_logo after do_patch before do_compile
 
 do_add_logo () {
 
-    convert.im7 -rotate 270 -depth 8 -colors 256 -compress none \
+    convert.im7 -rotate 270 -depth 8 -colors 256 -compress Zip \
                 ${WORKDIR}/embetrix.png \
                 BMP3:${S}/tools/logos/st.bmp
 }        
@@ -50,13 +50,7 @@ do_compile:prepend () {
 
         # Build Device Tree blobs
         oe_runmake -C ${S} O=${B} ${UBOOT_MAKE_TARGET} dtbs
-        
-        bbwarn "uboot-mkimage \
-            ${@'-D "${UBOOT_MKIMAGE_DTCOPTS}"' if len('${UBOOT_MKIMAGE_DTCOPTS}') else ''} \
-            ${UBOOT_MKIMAGE_SIGN_ARGS} \
-            -F -k '${UBOOT_SIGN_KEYDIR}' \
-            -K  ${B}/arch/arm/dts/${UBOOT_DEVICETREE}.dtb \
-            -r -f ${WORKDIR}/template.its ${B}/template.fit"
+
         uboot-mkimage \
             ${@'-D "${UBOOT_MKIMAGE_DTCOPTS}"' if len('${UBOOT_MKIMAGE_DTCOPTS}') else ''} \
             ${UBOOT_MKIMAGE_SIGN_ARGS} \
