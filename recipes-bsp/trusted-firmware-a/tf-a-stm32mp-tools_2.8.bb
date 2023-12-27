@@ -20,7 +20,6 @@ do_compile:prepend() {
 
     sed -i '/^LDLIBS/ s,$, \$\{BUILD_LDFLAGS},'       ${S}/tools/fiptool/Makefile
     sed -i '/^INCLUDE_PATHS/ s,$, \$\{BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
-
 }
 
 do_compile() {
@@ -36,7 +35,5 @@ do_install() {
     install -m 0755 ${B}/tools/cert_create/cert_create ${D}${bindir}
 }
 
-
 FILES:${PN} = "${bindir}"
-
 BBCLASSEXTEND = "native nativesdk"

@@ -66,6 +66,12 @@ do_compile:prepend() {
     unset LDFLAGS
     unset CFLAGS
     unset CPPFLAGS
+
+    sed -i '/^LIB_DIR/ s,$, \$\{BUILD_LDFLAGS},'      ${S}/tools/cert_create/Makefile
+    sed -i '/^INC_DIR/ s,$, \$\{BUILD_CFLAGS},'       ${S}/tools/cert_create/Makefile
+
+    sed -i '/^LDLIBS/ s,$, \$\{BUILD_LDFLAGS},'       ${S}/tools/fiptool/Makefile
+    sed -i '/^INCLUDE_PATHS/ s,$, \$\{BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
 }
 
 # Generate FIP
