@@ -30,8 +30,7 @@ TFA_DEVICETREE    ?= "${MACHINE}"
 KERNEL_DEVICETREE ?= "${MACHINE}.dtb"
 
 # U-Boot
-UBOOT_MACHINE     = "stm32mp15_defconfig"
-#UBOOT_MACHINE     ?= "stm32mp15_trusted_defconfig"
+UBOOT_MACHINE      = "stm32mp15_defconfig"
 UBOOT_DEVICETREE  ?= "${MACHINE}"
 UBOOT_MAKE_TARGET ?= "DEVICE_TREE=${UBOOT_DEVICETREE} all"
 
@@ -50,9 +49,9 @@ MACHINE_FEATURES  += "wifi optee"
 PREFERRED_PROVIDER_u-boot-fw-utils = "libubootenv"
 
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
-                    kernel-image \
                     kernel-modules \
                     "
+RRECOMMENDS:${KERNEL_PACKAGE_NAME}-base = ""
 
 MACHINE_EXTRA_RRECOMMENDS += "\
                     bootcount-reset \
@@ -67,6 +66,8 @@ WKS_FILE_DEPENDS ?= " \
                     e2fsprogs-native \
                     bmap-tools-native \
                     "
+
+IMAGE_BOOT_FILES += "fitImage"
 
 # Wic default support
 WKS_FILE ?= "stm32mp15x.wks"
@@ -84,4 +85,3 @@ UBOOT_SIGN_KEYNAME    ?= "ubootfit"
 UBOOT_MKIMAGE_DTCOPTS ?= "-I dts -O dtb -p 2000"
 FIT_HASH_ALG = "sha256"
 FIT_SIGN_ALG = "rsa2048"
-

@@ -35,8 +35,8 @@ index e9bfbc482ef..3218118d8df 100644
  	"fi;\0"
  
 +#define SD_BOOT \
-+	"sd_boot=if test ${active_system} = 1; then setenv mmcroot /dev/mmcblk0p5 && setenv bootpart 0:5; fi;" \
-+	"ext4load mmc ${bootpart} ${kernel_addr_r} /boot/${image.linux};" \
++	"sd_boot=if test ${active_system} = 1; then setenv mmcroot /dev/mmcblk0p5 && setenv bootpart 0:7; fi;" \
++	"ext4load mmc ${bootpart} ${kernel_addr_r} ${image.linux};" \
 +	"setenv bootargs \"console=${console} root=${mmcroot} ${optargs}\";" \
 +	"bootm ${kernel_addr_r}\0"
 +
@@ -56,7 +56,7 @@ index e9bfbc482ef..3218118d8df 100644
 -	STM32MP_BOARD_EXTRA_ENV
 +	STM32MP_BOARD_EXTRA_ENV \
 +	"bootdelay=0\0" \
-+	"bootpart=0:4\0" \
++	"bootpart=0:6\0" \
 +	"active_system=0\0" \
 +	"console=ttySTM0,115200\0" \
 +	"splashimage=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
