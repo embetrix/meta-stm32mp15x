@@ -85,3 +85,7 @@ UBOOT_SIGN_KEYNAME    ?= "ubootfit"
 UBOOT_MKIMAGE_DTCOPTS ?= "-I dts -O dtb -p 2000"
 FIT_HASH_ALG = "sha256"
 FIT_SIGN_ALG = "rsa2048"
+
+# Kernel Module Signing
+KMOD_SIGN_KEY  ?= "${STM32MP15X_BASE}/conf/keys/devel/kmod/kmod-sign-key.pem"
+KMOD_SIGN_CERT ?= "${STM32MP15X_BASE}/conf/keys/devel/kmod/kmod-sign-cert.pem"

@@ -30,3 +30,21 @@ do_add_logo () {
                 ${WORKDIR}/embetrix.png \
                 ${STAGING_KERNEL_DIR}/drivers/video/logo/logo_linux_clut224.ppm
 }
+
+kernel_do_configure:prepend() {
+
+    if [ -f "${KMOD_SIGN_KEY}" -a -f "${KMOD_SIGN_CERT}" ]; then
+        cat "${KMOD_SIGN_KEY}" "${KMOD_SIGN_CERT}" > "${B}/modsign_key.pem"
+    else
+        bberror "kmod-sign: key or certificate are invalid!"
+    fi
+}
+
+do_shared_workdir:append() {
+
+    if [ -f "${KMOD_SIGN_KEY}" -a -f "${KMOD_SIGN_CERT}" ]; then
+        cp "${B}/modsign_key.pem" $kerneldir/
+    else
+        bberror "kmod-sign: key or certificate are invalid!"
+    fi
+}
