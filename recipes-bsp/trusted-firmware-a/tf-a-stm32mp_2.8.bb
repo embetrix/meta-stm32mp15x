@@ -1,15 +1,8 @@
-SUMMARY = "Trusted Firmware-A for STM32MP1"
-SECTION = "bootloaders"
-LICENSE = "BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
+require tf-a-stm32mp-common.inc
 
 inherit deploy
 
 PROVIDES += "virtual/trusted-firmware-a"
-
-SRC_URI = "git://github.com/STMicroelectronics/arm-trusted-firmware;protocol=https;branch=${SRCBRANCH}"
-SRCBRANCH = "v2.8-stm32mp"
-SRCREV = "61924c04caa485af6d4be4663b4977f6ac226ca0"
 
 # Add MBEDTLS support required for TRUSTED_BOARD_BOOT
 MBEDTLS_DIR = "${WORKDIR}/mbedtls"
@@ -19,22 +12,20 @@ SRCREV_mbedtls = "8b3f26a5ac38d4fdccbc5c5366229f3e01dafcc0"
 LIC_FILES_CHKSUM += "file://${MBEDTLS_DIR}/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 LICENSE_MBEDTLS = "Apache-2.0"
 
-DEPENDS += "dtc-native openssl-native util-linux-native tf-a-stm32mp-tools-native stm32mp-keygen-native"
+DEPENDS += "util-linux-native tf-a-stm32mp-tools-native stm32mp-keygen-native"
 
 do_compile[depends] += " \
     virtual/bootloader:do_deploy \
     ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'virtual/optee-os:do_deploy', '', d)} \
-"
+    "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-S = "${WORKDIR}/git"
-
 # Define default TF-A namings
 TF_A_BASENAME = "tf-a"
-TF_A_SUFFIX = "stm32"
-DT_SUFFIX = "dtb"
-FIP_BASENAME="fip"
+TF_A_SUFFIX   = "stm32"
+DT_SUFFIX     = "dtb"
+FIP_BASENAME  = "fip"
 
 # Configure build type: debug/release
 TFA_BUILD_TYPE ?= "release"
@@ -66,12 +57,6 @@ do_compile:prepend() {
     unset LDFLAGS
     unset CFLAGS
     unset CPPFLAGS
-
-    sed -i '/^LIB_DIR/ s,$, \$\{BUILD_LDFLAGS},'      ${S}/tools/cert_create/Makefile
-    sed -i '/^INC_DIR/ s,$, \$\{BUILD_CFLAGS},'       ${S}/tools/cert_create/Makefile
-
-    sed -i '/^LDLIBS/ s,$, \$\{BUILD_LDFLAGS},'       ${S}/tools/fiptool/Makefile
-    sed -i '/^INCLUDE_PATHS/ s,$, \$\{BUILD_CFLAGS},' ${S}/tools/fiptool/Makefile
 }
 
 # Generate FIP
