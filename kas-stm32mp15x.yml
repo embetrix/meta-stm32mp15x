@@ -10,7 +10,7 @@ repos:
   meta-stm32mp15x:
   poky:
     url: "https://git.yoctoproject.org/git/poky"
-    refspec: kirkstone
+    refspec: scarthgap
     path: "layers"
     layers:
       meta:
@@ -18,7 +18,7 @@ repos:
       meta-yocto-bsp:
   meta-openembedded:
     url: "https://github.com/openembedded/meta-openembedded.git"
-    refspec: kirkstone
+    refspec: scarthgap
     path: "layers/meta-openembedded"
     layers:
       meta-oe:
