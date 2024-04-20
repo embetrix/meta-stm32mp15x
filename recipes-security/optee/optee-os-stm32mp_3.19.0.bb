@@ -55,7 +55,7 @@ do_configure:prepend(){
 }
 
 do_compile() {
-    export CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_HOST}"
+    export CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_HOST} -Wno-error=enum-int-mismatch"
     export OPENSSL_MODULES=${STAGING_LIBDIR_NATIVE}/ossl-modules/
     if [ -n "${OPTEE_CONF}" ]; then
         for conf in ${OPTEE_CONF}; do
