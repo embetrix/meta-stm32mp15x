@@ -18,6 +18,8 @@ SRC_URI  = "git://github.com/STMicroelectronics/u-boot.git;protocol=https;branch
             file://template.its                                \
             file://embetrix.png"
 
+inherit uboot-sign
+
 UBOOT_INITIAL_ENV = "u-boot-initial-env"
 
 COMPATIBLE_MACHINE = "(stm32mp15x)"
