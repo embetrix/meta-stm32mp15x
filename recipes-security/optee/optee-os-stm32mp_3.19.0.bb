@@ -13,7 +13,6 @@ S = "${WORKDIR}/git"
 COMPATIBLE_MACHINE = "(stm32mp15x)"
 
 PROVIDES += "virtual/optee-os"
-RPROVIDES:${PN} += "virtual/optee-os"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

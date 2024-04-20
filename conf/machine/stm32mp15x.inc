@@ -20,7 +20,7 @@ UBOOT_DTB_LOADADDRESS = "0xC4000000"
 SERIAL_CONSOLES       = "115200;ttySTM0"
 SERIAL_CONSOLES_CHECK = "${SERIAL_CONSOLES}"
 
-KERNEL_CLASSES  += "kernel-fitimage uboot-sign"
+KERNEL_CLASSES  += "kernel-fitimage"
 KERNEL_IMAGETYPE = "fitImage"
 
 # Trused Firmware
@@ -64,7 +64,7 @@ WKS_FILE_DEPENDS ?= " \
                     virtual/trusted-firmware-a \
                     virtual/bootloader \
                     e2fsprogs-native \
-                    bmap-tools-native \
+                    bmaptool-native \
                     "
 
 IMAGE_BOOT_FILES += "fitImage"

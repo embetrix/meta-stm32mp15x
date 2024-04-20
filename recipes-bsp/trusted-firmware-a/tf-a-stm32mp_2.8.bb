@@ -2,7 +2,7 @@ require tf-a-stm32mp-common.inc
 
 inherit deploy
 
-PROVIDES += "virtual/trusted-firmware-a"
+PROVIDES = "virtual/trusted-firmware-a"
 
 # Add MBEDTLS support required for TRUSTED_BOARD_BOOT
 MBEDTLS_DIR = "${WORKDIR}/mbedtls"
@@ -11,6 +11,7 @@ SRC_URI += "git://github.com/ARMmbed/mbedtls.git;protocol=https;destsuffix=${MBE
 SRCREV_mbedtls = "8b3f26a5ac38d4fdccbc5c5366229f3e01dafcc0"
 LIC_FILES_CHKSUM += "file://${MBEDTLS_DIR}/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 LICENSE_MBEDTLS = "Apache-2.0"
+SRCREV_FORMAT = "mbedtls"
 
 DEPENDS += "util-linux-native tf-a-stm32mp-tools-native stm32mp-keygen-native"
 
