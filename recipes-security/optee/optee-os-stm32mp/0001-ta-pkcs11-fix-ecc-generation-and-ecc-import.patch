@@ -400,7 +400,7 @@ From 60c0a719d4e676bb5dd93d03a5679f0ec367aab0 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Vesa=20J=C3=A4=C3=A4skel=C3=A4inen?=
  <vesa.jaaskelainen@vaisala.com>
 Date: Sat, 29 Jul 2023 14:27:55 +0300
-Subject: [PATCH 5/5] ta: pkcs11: fix EC private key import
+Subject: [PATCH] ta: pkcs11: fix EC private key import
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -410,12 +410,13 @@ When importing EC private key also generate hidden EC public key for that.
 This fixes EC private key import problem.
 
 Signed-off-by: Vesa Jääskeläinen <vesa.jaaskelainen@vaisala.com>
+
 ---
- ta/pkcs11/src/pkcs11_attributes.c | 179 ++++++++++++++++++++++++++++++
- 1 file changed, 179 insertions(+)
+ ta/pkcs11/src/pkcs11_attributes.c | 180 ++++++++++++++++++++++++++++++
+ 1 file changed, 180 insertions(+)
 
 diff --git a/ta/pkcs11/src/pkcs11_attributes.c b/ta/pkcs11/src/pkcs11_attributes.c
-index aad20fae2..06471fdb5 100644
+index b86162fd4..5e384639d 100644
 --- a/ta/pkcs11/src/pkcs11_attributes.c
 +++ b/ta/pkcs11/src/pkcs11_attributes.c
 @@ -5,6 +5,8 @@
@@ -435,7 +436,7 @@ index aad20fae2..06471fdb5 100644
  #include "sanitize_object.h"
  #include "serializer.h"
  #include "token_capabilities.h"
-@@ -786,6 +789,180 @@ static enum pkcs11_rc create_pub_key_attributes(struct obj_attrs **out,
+@@ -793,6 +796,180 @@ static enum pkcs11_rc create_pub_key_attributes(struct obj_attrs **out,
  	return set_attributes_opt_or_null(out, temp, oon, oon_count);
  }
  
@@ -616,7 +617,7 @@ index aad20fae2..06471fdb5 100644
  static enum pkcs11_rc create_priv_key_attributes(struct obj_attrs **out,
  						 struct obj_attrs *temp)
  {
-@@ -1099,6 +1276,9 @@ create_attributes_from_template(struct obj_attrs **out, void *template,
+@@ -1124,6 +1301,9 @@ create_attributes_from_template(struct obj_attrs **out, void *template,
  		break;
  	case PKCS11_CKO_PRIVATE_KEY:
  		rc = create_priv_key_attributes(&attrs, temp);
