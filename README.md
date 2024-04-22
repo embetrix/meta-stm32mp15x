@@ -88,8 +88,7 @@ Out:   serial
 Err:   serial
 Net:   eth0: ethernet@5800a000
 Hit any key to stop autoboot:  0 
-Saving Environment to MMC... Writing to MMC(0)... OK
-6949886 bytes read in 420 ms (15.8 MiB/s)
+6975862 bytes read in 413 ms (16.1 MiB/s)
 ## Loading kernel from FIT Image at c8000000 ...
    Using 'conf-stm32mp157f-dk2.dtb' configuration
    Verifying Hash Integrity ... sha256,rsa2048:ubootfit+ OK
@@ -98,14 +97,14 @@ Saving Environment to MMC... Writing to MMC(0)... OK
      Created:      2023-10-02  11:43:32 UTC
      Type:         Kernel Image
      Compression:  uncompressed
-     Data Start:   0xc8000118
-     Data Size:    6860504 Bytes = 6.5 MiB
+     Data Start:   0xc8000108
+     Data Size:    6886496 Bytes = 6.6 MiB
      Architecture: ARM
      OS:           Linux
      Load Address: 0xc2000000
      Entry Point:  0xc2000000
      Hash algo:    sha256
-     Hash value:   1c385609fd85f0b2800ff725517261c2122d3e4ab4aa38f7deb8af462040918f
+     Hash value:   b1fbe72d03c4c334ec5007167483684e61de35a5b843efc4d80a1d780a04a31b
    Verifying Hash Integrity ... sha256+ OK
 ## Loading fdt from FIT Image at c8000000 ...
    Using 'conf-stm32mp157f-dk2.dtb' configuration
@@ -115,14 +114,14 @@ Saving Environment to MMC... Writing to MMC(0)... OK
      Created:      2023-10-02  11:43:32 UTC
      Type:         Flat Device Tree
      Compression:  uncompressed
-     Data Start:   0xc868b100
+     Data Start:   0xc8691678
      Data Size:    87138 Bytes = 85.1 KiB
      Architecture: ARM
      Load Address: 0xc4000000
      Hash algo:    sha256
      Hash value:   4acc0143bd2cc251ab55e9576e51b60ba9e5f767a734dac308aee309b7bf4d08
    Verifying Hash Integrity ... sha256+ OK
-   Loading fdt from 0xc868b100 to 0xc4000000
+   Loading fdt from 0xc8691678 to 0xc4000000
    Booting using the fdt blob at 0xc4000000
    Loading Kernel Image
    Loading Device Tree to cffe7000, end cffff461 ... OK
@@ -131,7 +130,7 @@ Bootstage space exhasuted
 Starting kernel ...
 
 
-Poky (Yocto Project Reference Distro) 4.0.15 stm32mp157f-dk2 ttySTM0
+Poky (Yocto Project Reference Distro) 5.0 stm32mp157f-dk2 ttySTM0
 
 stm32mp157f-dk2 login: root
 root@stm32mp157f-dk2:~# 
