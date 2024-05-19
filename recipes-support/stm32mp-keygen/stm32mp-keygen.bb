@@ -16,13 +16,6 @@ do_install () {
     install -m 0755 ${S}/ecdsa-sha256.py ${D}${bindir}/ecdsa-sha256
 }
 
-do_install:append:class-native() {
-
-    # use yocto native python instead of host python
-    sed -i 's|/usr/bin/env python3|'"${RECIPE_SYSROOT_NATIVE}/${bindir_native}"'/python3-native/python3|g' ${D}${bindir}/stm32-sign
-    sed -i 's|/usr/bin/env python3|'"${RECIPE_SYSROOT_NATIVE}/${bindir_native}"'/python3-native/python3|g' ${D}${bindir}/ecdsa-sha256
-}
-
 FILES:${PN} = "${bindir}"
 
 BBCLASSEXTEND = "native nativesdk"

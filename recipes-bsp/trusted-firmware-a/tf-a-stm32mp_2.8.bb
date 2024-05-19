@@ -1,6 +1,6 @@
 require tf-a-stm32mp-common.inc
 
-inherit deploy
+inherit python3native deploy
 
 PROVIDES = "virtual/trusted-firmware-a"
 
