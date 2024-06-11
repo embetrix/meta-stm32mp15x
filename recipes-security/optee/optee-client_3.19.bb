@@ -7,6 +7,7 @@ LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=69663ab153298557a59c67a60a743e5b"
 inherit python3native systemd cmake pkgconfig
 
 SRC_URI = "git://github.com/OP-TEE/optee_client.git;protocol=https;branch=master \
+           file://0001-tee-supplicant-send-READY-1-notification-to-systemd.patch \
            file://tee-supplicant.service \
     "
 

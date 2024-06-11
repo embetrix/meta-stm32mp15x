@@ -2,6 +2,7 @@
 Description=TEE Supplicant
 
 [Service]
+Type=notify
 EnvironmentFile=-/etc/default/tee-supplicant
 ExecStartPre=-/bin/mkdir -p /var/data/tee
 ExecStart=/usr/sbin/tee-supplicant $OPTARGS
