@@ -38,6 +38,13 @@ kernel_do_configure:prepend() {
     else
         bberror "kmod-sign: key or certificate are invalid!"
     fi
+
+    if [ -f "${IMA_SIGN_CA}" ]; then
+        cp "${IMA_SIGN_CA}"  "${B}/"
+    else
+        bberror "ima-sign: certificate is invalid!"
+    fi
+
 }
 
 do_shared_workdir:append() {
@@ -47,4 +54,11 @@ do_shared_workdir:append() {
     else
         bberror "kmod-sign: key or certificate are invalid!"
     fi
+
+    if [ -f "${IMA_SIGN_CA}" ]; then
+        cp "${IMA_SIGN_CA}" "${B}/"
+    else
+        bberror "ima-sign: certificate is invalid!"
+    fi
+
 }

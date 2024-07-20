@@ -1,6 +1,8 @@
 DESCRIPTION = "A STM32MP15x Demo Image"
 
-IMAGE_FEATURES += "ssh-server-openssh"
+inherit core-image ima-evm-sign
+
+IMAGE_FEATURES += "ssh-server-openssh read-only-rootfs"
 
 IMAGE_INSTALL += "\
     packagegroup-core-boot \
@@ -14,6 +16,7 @@ IMAGE_INSTALL += "\
     strace \
     gdbserver \
     lvgl-demo \
+    cryptsetup \
+    keyutils \
+    ima-evm-utils \
     "
-
-inherit core-image

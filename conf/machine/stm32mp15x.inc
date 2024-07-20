@@ -20,6 +20,10 @@ UBOOT_DTB_LOADADDRESS = "0xC4000000"
 SERIAL_CONSOLES       = "115200;ttySTM0"
 SERIAL_CONSOLES_CHECK = "${SERIAL_CONSOLES}"
 
+INITRAMFS_IMAGE  = "stm32mp15x-image-initramfs"
+INITRAMFS_IMAGE_NAME = "stm32mp15x-image-initramfs"
+INITRAMFS_IMAGE_BUNDLE = "1"
+
 KERNEL_CLASSES  += "kernel-fitimage uboot-sign"
 KERNEL_IMAGETYPE = "fitImage"
 
@@ -89,3 +93,10 @@ FIT_SIGN_ALG = "rsa2048"
 # Kernel Module Signing
 KMOD_SIGN_KEY  ?= "${STM32MP15X_BASE}/conf/keys/devel/kmod/kmod-sign-key.pem"
 KMOD_SIGN_CERT ?= "${STM32MP15X_BASE}/conf/keys/devel/kmod/kmod-sign-cert.pem"
+
+# IMA Signing
+IMA_SIGN_KEY    ?= "${STM32MP15X_BASE}/conf/keys/devel/imaevm/privkey_ima.pem"
+IMA_SIGN_CERT   ?= "${STM32MP15X_BASE}/conf/keys/devel/imaevm/x509_ima.der"
+IMA_SIGN_CA     ?= "${STM32MP15X_BASE}/conf/keys/devel/imaevm/ima-local-ca.pem"
+EVM_KMK_KEY     ?= "${STM32MP15X_BASE}/conf/keys/devel/imaevm/kmk-user.blob"
+EVM_KEY         ?= "${STM32MP15X_BASE}/conf/keys/devel/imaevm/evm-user.blob"

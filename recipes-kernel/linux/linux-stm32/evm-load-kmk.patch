@@ -1,0 +1,164 @@
+diff --git a/security/integrity/evm/Kconfig b/security/integrity/evm/Kconfig
+index a6e19d23e700..8571311adb68 100644
+--- a/security/integrity/evm/Kconfig
++++ b/security/integrity/evm/Kconfig
+@@ -72,3 +72,26 @@ config EVM_X509_PATH
+ 	default "/etc/keys/x509_evm.der"
+ 	help
+ 	   This option defines X509 certificate path.
++
++config EVM_LOAD_KEY
++	bool "Load EVM HMAC key from the kernel"
++	depends on EVM
++	select INTEGRITY_FILE_READ
++	default n
++	help
++	   This option enables EVM HMAC key loading from the kernel.
++	   It enables EVM.
++
++config EVM_KEY_PATH
++	string "EVM HMAC key path"
++	depends on EVM_LOAD_KEY
++	default "/etc/ima/evm-key"
++	help
++	   This option defines EVM HMAC key path.
++
++config EVM_KMK_PATH
++	string "EVM master key path"
++	depends on EVM_LOAD_KEY
++	default "/etc/ima/evm-kmk"
++	help
++	   This option defines EVM master key path.
+diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
+index f8b8c5004fc7..06a2e49b912f 100644
+--- a/security/integrity/evm/evm.h
++++ b/security/integrity/evm/evm.h
+@@ -61,5 +61,7 @@ int evm_calc_hash(struct dentry *dentry, const char *req_xattr_name,
+ int evm_init_hmac(struct inode *inode, const struct xattr *xattr,
+ 		  char *hmac_val);
+ int evm_init_secfs(void);
+-
++#ifdef CONFIG_EVM_LOAD_KEY
++int evm_load_key(const char *key, const char *kmk);
++#endif
+ #endif
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index 708de9656bbd..bc1fac50b99d 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -426,3 +426,85 @@ int evm_init_key(void)
+ 	key_put(evm_key);
+ 	return rc;
+ }
++
++#ifdef CONFIG_EVM_LOAD_KEY
++int evm_load_key(const char *key, const char *kmk)
++{
++	key_ref_t key_ref, keyring_ref;
++	char *data, *tdata = NULL, *cmd, *type, ch = '\0';
++	int rc, len;
++	bool trusted = false;
++	keyring_ref = make_key_ref(current_cred()->user->uid_keyring, 1);
++	len = integrity_read_file(key, &data);
++	if (len < 0)
++		return len;
++	swap(data[len - 1], ch);
++	if (strstr(data, "trusted"))
++		trusted = true;
++	swap(data[len - 1], ch);
++	rc = integrity_read_file(kmk, &tdata);
++	if (rc < 0)
++		goto out;
++	/* padd does not like \n - remove it*/
++	if (strchr(tdata, '\n'))
++		rc--;
++	if (trusted) {
++		/* we need 'load' keyword */
++		cmd = kmalloc(rc + 5, GFP_KERNEL);
++		if (!cmd)
++			goto out;
++		memcpy(cmd, "load ", 5);
++		memcpy(cmd + 5, tdata, rc);
++		rc += 5;
++	} else {
++		cmd = tdata;
++	}
++	key_ref = key_create_or_update(keyring_ref,
++					trusted ? "trusted" : "user", "kmk",
++					cmd, rc,
++					((KEY_POS_ALL & ~KEY_POS_SETATTR) |
++					KEY_USR_VIEW | KEY_USR_READ),
++					KEY_ALLOC_NOT_IN_QUOTA);
++	if (trusted)
++		kfree(cmd);
++	type = trusted ? "trusted" : "user";
++	if (IS_ERR(key_ref)) {
++		rc = PTR_ERR(key_ref);
++		pr_err("problem loading EVM kmk (%s) (%d): %s\n",
++		       type, rc, kmk);
++		goto out;
++	} else {
++		pr_notice("loaded EVM kmk (%s) %d': %s\n",
++			  type, key_ref_to_ptr(key_ref)->serial, kmk);
++		key_ref_put(key_ref);
++	}
++	/* padd does not like \n - remove it*/
++	if (strchr(data, '\n'))
++		len--;
++	/* we need 'load' keyword */
++	cmd = kmalloc(len + 5, GFP_KERNEL);
++	if (!cmd)
++		goto out;
++	memcpy(cmd, "load ", 5);
++	memcpy(cmd + 5, data, len);
++	key_ref = key_create_or_update(keyring_ref,
++					"encrypted", EVMKEY, cmd, len + 5,
++					((KEY_POS_ALL & ~KEY_POS_SETATTR) |
++					KEY_USR_VIEW | KEY_USR_READ),
++					KEY_ALLOC_NOT_IN_QUOTA);
++	kfree(cmd);
++	if (IS_ERR(key_ref)) {
++		rc = PTR_ERR(key_ref);
++		pr_err("problem loading EVM key (%d): %s\n", rc, key);
++	} else {
++		pr_notice("loaded EVM key %d': %s\n",
++			  key_ref_to_ptr(key_ref)->serial, key);
++		key_ref_put(key_ref);
++		rc = evm_init_key();
++	}
++out:
++	kfree(tdata);
++	kfree(data);
++	return rc;
++}
++#endif
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 23d484e05e6f..e41d2235f8fd 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -84,6 +84,14 @@ static int __init evm_set_fixmode(char *str)
+ }
+ __setup("evm=", evm_set_fixmode);
+ 
++static int evm_load;
++static int __init evm_load_setup(char *str)
++{
++	evm_load = 1;
++	return 0;
++}
++__setup("evm_load", evm_load_setup);
++
+ static void __init evm_init_config(void)
+ {
+ 	int i, xattrs;
+@@ -883,6 +891,10 @@ void __init evm_load_x509(void)
+ 	rc = integrity_load_x509(INTEGRITY_KEYRING_EVM, CONFIG_EVM_X509_PATH);
+ 	if (!rc)
+ 		evm_initialized |= EVM_INIT_X509;
++#ifdef CONFIG_EVM_LOAD_KEY
++	if (evm_load)
++		evm_load_key(CONFIG_EVM_KEY_PATH, CONFIG_EVM_KMK_PATH);
++#endif
+ }
+ #endif
+ 
