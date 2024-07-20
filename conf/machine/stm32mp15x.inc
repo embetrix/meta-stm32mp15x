@@ -58,6 +58,7 @@ MACHINE_EXTRA_RRECOMMENDS += "\
                     u-boot-fw-utils \
                     linux-firmware-bcm43430 \
                     ${@bb.utils.contains('MACHINE_FEATURES', 'optee', 'optee-test optee-examples optee-client', '', d)} \
+                    ${@bb.utils.contains('MACHINE_FEATURES', 'rt', 'rt-tests', '', d)} \
                     "
 
 WKS_FILE_DEPENDS ?= " \

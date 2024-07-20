@@ -18,7 +18,6 @@ KERNEL_VERSION_SANITY_SKIP="1"
 
 SRC_URI  = "git://github.com/STMicroelectronics/linux.git;protocol=https;branch=${SRCBRANCH}"
 SRC_URI += "file://fbcon.c.patch"
-SRC_URI += "file://defconfig"
 SRC_URI += "file://embetrix.png"
 
 do_add_logo[depends] += "imagemagick-native:do_populate_sysroot"
