@@ -43,7 +43,7 @@ OPTEE_PAGER      = "tee-pager_v2"
 OPTEE_PAGEABLE   = "tee-pageable_v2"
 OPTEE_SUFFIX     = "bin"
 
-MACHINE_FEATURES  += "wifi optee"
+MACHINE_FEATURES  += "wifi optee rt"
 
 # Preferred providers
 PREFERRED_PROVIDER_u-boot-fw-utils = "libubootenv"
