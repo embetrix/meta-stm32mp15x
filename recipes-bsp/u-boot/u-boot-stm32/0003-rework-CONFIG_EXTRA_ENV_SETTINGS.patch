@@ -54,7 +54,7 @@ index 7b0ed0a121..39c97b13e0 100644
  	STM32MP_EXTRA \
 -	STM32MP_BOARD_EXTRA_ENV
 +	STM32MP_BOARD_EXTRA_ENV \
-+	"bootdelay=0\0" \
++	"bootdelay=1\0" \
 +	"bootpart=0:6\0" \
 +	"active_system=0\0" \
 +	"console=ttySTM0,115200\0" \
