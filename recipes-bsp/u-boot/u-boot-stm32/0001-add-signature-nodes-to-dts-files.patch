@@ -20,7 +20,7 @@ index 55126617bf..ae2bbeb130 100644
 +	signature {
 +		key-ubootfit {
 +			required = "conf";
-+			algo = "sha256,ecdsa256";
++			algo = "sha256,rsa2048";
 +			key-name-hint = "ubootfit";
 +		};
 +	};
@@ -39,7 +39,7 @@ index f18aa8c35f..cd93eed192 100644
 +	signature {
 +		key-ubootfit {
 +			required = "conf";
-+			algo = "sha256,ecdsa256";
++			algo = "sha256,rsa2048";
 +			key-name-hint = "ubootfit";
 +		};
 +	};
