@@ -1,15 +1,15 @@
-From 3d9f8ca6a0c0ce01b00c9ccf90df52724e8f4413 Mon Sep 17 00:00:00 2001
+From 93c29bdf97040789b477575dbbbfdeefd239d50a Mon Sep 17 00:00:00 2001
 From: Ayoub Zaki <ayoub.zaki@embetrix.com>
 Date: Wed, 31 Jul 2024 17:55:07 +0200
-Subject: [PATCH 4/4] rework stm32mp15x defconfig
+Subject: [PATCH] rework stm32mp15x defconfig
 
 Signed-off-by: Ayoub Zaki <ayoub.zaki@embetrix.com>
 ---
- configs/stm32mp15_defconfig | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ configs/stm32mp15_defconfig | 26 ++++++++++++++++----------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
 
 diff --git a/configs/stm32mp15_defconfig b/configs/stm32mp15_defconfig
-index 5f3fbac002..2e317cd5d5 100644
+index 5f3fbac002..03c1e59040 100644
 --- a/configs/stm32mp15_defconfig
 +++ b/configs/stm32mp15_defconfig
 @@ -2,14 +2,14 @@ CONFIG_ARM=y
@@ -48,7 +48,7 @@ index 5f3fbac002..2e317cd5d5 100644
  CONFIG_TFTP_TSIZE=y
  CONFIG_STM32_ADC=y
  CONFIG_CLK_SCMI=y
-@@ -187,3 +180,13 @@ CONFIG_FWU_MULTI_BANK_UPDATE=y
+@@ -187,3 +180,16 @@ CONFIG_FWU_MULTI_BANK_UPDATE=y
  CONFIG_FWU_MDATA_V2=y
  # CONFIG_TOOLS_MKEFICAPSULE is not set
  # CONFIG_TOOLS_MKFWUMDATA is not set
@@ -62,6 +62,9 @@ index 5f3fbac002..2e317cd5d5 100644
 +CONFIG_ECDSA=y
 +CONFIG_ECDSA_VERIFY=y
 +CONFIG_OF_CONTROL=y
++CONFIG_ENV_WRITEABLE_LIST=y
++CONFIG_ENV_FLAGS_LIST_DEFAULT="active_system:dw"
++CONFIG_ENV_FLAGS_LIST_STATIC="active_system:dw"
 -- 
 2.34.1
 
