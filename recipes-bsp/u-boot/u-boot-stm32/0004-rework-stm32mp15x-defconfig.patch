@@ -67,4 +67,3 @@ index 5f3fbac002..03c1e59040 100644
 +CONFIG_ENV_FLAGS_LIST_STATIC="active_system:dw"
 -- 
 2.34.1
-
