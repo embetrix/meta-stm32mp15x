@@ -16,4 +16,8 @@ if [ ! -z  $(fw_printenv -n rollback) ] ; then
     fw_setenv rollback
 fi
 
+if [ ! -z  $(fw_printenv -n ustate) ] ; then
+    fw_setenv ustate
+fi
+
 echo "Bootcount Reset OK."
