@@ -64,8 +64,8 @@ index e9bfbc482ef..3218118d8df 100644
 +	"image.linux=fitImage\0" \
 +	"optargs=rw rootwait quiet loglevel=0 vt.global_cursor_default=0 fbcon=rotate:3\0" \
 +	"mmcroot=/dev/mmcblk0p4\0" \
-+	"bootlimit=3\0" \
-+	"altbootcmd=if test ${active_system} = 1; then setenv active_system 0; else setenv active_system 1; fi; saveenv; run bootcmd\0" \
++	"bootlimit=2\0" \
++	"altbootcmd=if test ${active_system} = 1; then setenv active_system 0; else setenv active_system 1; fi; if test ${ustate} = 1; then setenv ustate 3; fi; saveenv; run bootcmd\0" \
 +	SD_BOOT \
 +	NET_BOOT
  

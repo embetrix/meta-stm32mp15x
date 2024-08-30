@@ -11,3 +11,9 @@ echo "Bootcount : $BOOTCOUNT"
 
 devmem2 $BOOTCOUNT_RESET_REG b 0x0
 
+# reset u-boot env rollback
+if [ ! -z  $(fw_printenv -n rollback) ] ; then
+    fw_setenv rollback
+fi
+
+echo "Bootcount Reset OK."
