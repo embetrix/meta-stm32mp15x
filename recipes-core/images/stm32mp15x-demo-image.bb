@@ -10,6 +10,8 @@ IMAGE_INSTALL += "\
     opensc \
     libp11 \
     softhsm \
+    cryptsetup \
+    keyutils \
     curl \
     strace \
     gdbserver \
