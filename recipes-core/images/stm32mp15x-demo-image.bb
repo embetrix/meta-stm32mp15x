@@ -11,6 +11,8 @@ IMAGE_INSTALL += "\
     libp11 \
     softhsm \
     cryptsetup \
+    systemd-crypt \
+    systemd-container \
     keyutils \
     curl \
     strace \
