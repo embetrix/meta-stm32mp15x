@@ -9,12 +9,12 @@
 #
 #####################################################################################
 
-DEPENDS += "openssl-native util-linux-native tf-a-stm32mp-tools-native stm32mp-keygen-native"
+DEPENDS += "openssl-native util-linux-native tf-a-stm32mp-tools-native stm32mp-sign-tool-native"
 
 do_tfa_sign() {
 
-    stm32-sign  -k "${SECBOOT_SIGN_KEY}" \
-                -s ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} \
+    stm32mp-sign-tool  -k "${SECBOOT_SIGN_KEY}" \
+                -i ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} \
                 -o ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX}
 }
 
@@ -56,10 +56,8 @@ do_fip_sign() {
 
 do_deploy:append() {
 
-    openssl ec -in ${SECBOOT_SIGN_KEY}  -outform PEM -out ${DEPLOYDIR}/secureboot-pubkey.pem -pubout
-    ecdsa-sha256 --public-key=${DEPLOYDIR}/secureboot-pubkey.pem \
-                 --binhash-file=${DEPLOYDIR}/secureboot-pubkey-hash.bin
-    
+    stm32mp-sign-tool -k ${SECBOOT_SIGN_KEY} -h ${DEPLOYDIR}/secureboot-pubkey-hash.bin
+
     # Generate u-boot cmd to fuse public key hashes into OTP
     echo fuse prog -y 0 0x18 $(hexdump -e '/4 "0x"' -e '/1 "%x"' -e '" "'\
                  ${DEPLOYDIR}/secureboot-pubkey-hash.bin) > ${DEPLOYDIR}/u-boot-fuse-prog.txt
