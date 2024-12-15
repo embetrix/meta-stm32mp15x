@@ -53,13 +53,11 @@ Insert your SD Card into the compatible device and you should see in your serial
 ```
 NOTICE:  CPU: STM32MP157FAC Rev.Z
 NOTICE:  Model: STMicroelectronics STM32MP157F-DK2 Discovery Board
-NOTICE:  Board: MB1272 Var4.0 Rev.C-03
-NOTICE:  Bootrom authentication failed
+NOTICE:  Board: MB1272 Var4.0 Rev.C-02
+NOTICE:  Bootrom authentication succeeded
 NOTICE:  BL2: v2.8-stm32mp1-r1.1(release):v2.8-stm32mp-r1.1-3-g61924c04c-dirty(61924c04)
 NOTICE:  BL2: Built : 13:07:51, Oct 18 2023
 NOTICE:  TRUSTED_BOARD_BOOT support enabled
-NOTICE:  ROTPK is not deployed on platform. Skipping ROTPK verification.
-NOTICE:  ROTPK is not deployed on platform. Skipping ROTPK verification.
 NOTICE:  BL2: Booting BL32
 optee optee: OP-TEE: revision 3.19 (d0159bbf)
 
@@ -69,7 +67,7 @@ U-Boot 2022.10-stm32mp-r1.1 (Sep 18 2023 - 11:38:19 +0000)
 CPU: STM32MP157FAC Rev.Z
 Model: STMicroelectronics STM32MP157F-DK2 Discovery Board
 Board: stm32mp1 in trusted mode (st,stm32mp157f-dk2)
-Board: MB1272 Var4.0 Rev.C-03
+Board: MB1272 Var4.0 Rev.C-02
 DRAM:  512 MiB
 optee optee: OP-TEE: revision 3.19 (d0159bbf)
 Clocks:
@@ -88,7 +86,7 @@ Out:   serial
 Err:   serial
 Net:   eth0: ethernet@5800a000
 Hit any key to stop autoboot:  0 
-6975862 bytes read in 413 ms (16.1 MiB/s)
+7826746 bytes read in 446 ms (16.7 MiB/s)
 ## Loading kernel from FIT Image at c8000000 ...
    Using 'conf-stm32mp157f-dk2.dtb' configuration
    Verifying Hash Integrity ... sha256,rsa2048:ubootfit+ OK
@@ -97,14 +95,14 @@ Hit any key to stop autoboot:  0
      Created:      2023-10-02  11:43:32 UTC
      Type:         Kernel Image
      Compression:  uncompressed
-     Data Start:   0xc8000108
-     Data Size:    6886496 Bytes = 6.6 MiB
+     Data Start:   0xc80000ec
+     Data Size:    7737408 Bytes = 7.4 MiB
      Architecture: ARM
      OS:           Linux
      Load Address: 0xc2000000
      Entry Point:  0xc2000000
      Hash algo:    sha256
-     Hash value:   b1fbe72d03c4c334ec5007167483684e61de35a5b843efc4d80a1d780a04a31b
+     Hash value:   8c088804a963b023d427504e2fc36f98899aba7ba3efe583bb42b2e5db839854
    Verifying Hash Integrity ... sha256+ OK
 ## Loading fdt from FIT Image at c8000000 ...
    Using 'conf-stm32mp157f-dk2.dtb' configuration
@@ -114,14 +112,14 @@ Hit any key to stop autoboot:  0
      Created:      2023-10-02  11:43:32 UTC
      Type:         Flat Device Tree
      Compression:  uncompressed
-     Data Start:   0xc8691678
+     Data Start:   0xc876123c
      Data Size:    87138 Bytes = 85.1 KiB
      Architecture: ARM
      Load Address: 0xc4000000
      Hash algo:    sha256
      Hash value:   4acc0143bd2cc251ab55e9576e51b60ba9e5f767a734dac308aee309b7bf4d08
    Verifying Hash Integrity ... sha256+ OK
-   Loading fdt from 0xc8691678 to 0xc4000000
+   Loading fdt from 0xc876123c to 0xc4000000
    Booting using the fdt blob at 0xc4000000
    Loading Kernel Image
    Loading Device Tree to cffe7000, end cffff461 ... OK
