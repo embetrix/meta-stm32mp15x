@@ -15,7 +15,8 @@ do_tfa_sign() {
 
     stm32mp-sign-tool  -k "${SECBOOT_SIGN_KEY}" \
                 -i ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} \
-                -o ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX}
+                -o ${B}/build/stm32mp1/${TFA_BUILD_TYPE}/${TF_A_BASENAME}-${TFA_DEVICETREE}.${TF_A_SUFFIX} \
+                -h ${DEPLOY_DIR_IMAGE}/secureboot-pubkey-hash.bin
 }
 
 do_fip_sign() {
@@ -56,11 +57,9 @@ do_fip_sign() {
 
 do_deploy:append() {
 
-    stm32mp-sign-tool -k ${SECBOOT_SIGN_KEY} -h ${DEPLOYDIR}/secureboot-pubkey-hash.bin
-
     # Generate u-boot cmd to fuse public key hashes into OTP
     echo fuse prog -y 0 0x18 $(hexdump -e '/4 "0x"' -e '/1 "%x"' -e '" "'\
-                 ${DEPLOYDIR}/secureboot-pubkey-hash.bin) > ${DEPLOYDIR}/u-boot-fuse-prog.txt
+                 ${DEPLOY_DIR_IMAGE}/secureboot-pubkey-hash.bin) > ${DEPLOYDIR}/u-boot-fuse-prog.txt
 }
 
 addtask do_tfa_sign after do_compile
