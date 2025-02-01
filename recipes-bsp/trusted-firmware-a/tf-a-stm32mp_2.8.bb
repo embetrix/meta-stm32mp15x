@@ -48,6 +48,10 @@ EXTRA_OEMAKE += "STM32MP_SDMMC=1"
 EXTRA_OEMAKE += "STM32MP1_OPTEE_IN_SYSRAM=1"
 EXTRA_OEMAKE += "DTB_FILE_NAME=${TFA_DEVICETREE}.${DT_SUFFIX}"
 
+# Monotonic counter to be incremented and prevent bootloader rollback
+TFA_MONOTONIC_CNTR ?= "1"
+EXTRA_OEMAKE += "STM32_TF_VERSION=${TFA_MONOTONIC_CNTR}"
+
 # FIP signing configuration
 EXTRA_OEMAKE += "MBEDTLS_DIR=${MBEDTLS_DIR}"
 EXTRA_OEMAKE += "${@bb.utils.contains('SECBOOT_SIGN', '1', 'TRUSTED_BOARD_BOOT=1', '', d)}"
