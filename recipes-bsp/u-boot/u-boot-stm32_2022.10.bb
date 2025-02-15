@@ -10,6 +10,10 @@ DEPENDS += "python3-setuptools-native"
 SRCBRANCH = "v2022.10-stm32mp"
 SRCREV = "2c7a6accfa78d34c402fa262bb53f0b952198882"
 
+# disable task uboot_assemble_fitimage
+# seems to be broken somehow
+do_uboot_assemble_fitimage[noexec] = "1"
+
 SRC_URI  = "git://github.com/STMicroelectronics/u-boot.git;protocol=https;branch=${SRCBRANCH} \
             file://0001-add-signature-nodes-to-dts-files.patch \
             file://0002-shift-kernel-load-address.patch        \
