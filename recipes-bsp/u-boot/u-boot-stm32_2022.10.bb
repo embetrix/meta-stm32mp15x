@@ -19,6 +19,7 @@ SRC_URI  = "git://github.com/STMicroelectronics/u-boot.git;protocol=https;branch
             file://0002-shift-kernel-load-address.patch        \
             file://0003-rework-CONFIG_EXTRA_ENV_SETTINGS.patch \
             file://0004-rework-stm32mp15x-defconfig.patch      \
+            file://0005-CVE-2024-57256-ext4-Fix-integer-overflow-in-ext4fs_read_symlink.patch \
             file://template.its                                \
             file://embetrix.png"
 
