@@ -58,7 +58,7 @@ do_fip_sign() {
 do_deploy:append() {
 
     # Generate u-boot cmd to fuse public key hashes into OTP
-    echo fuse prog -y 0 0x18 $(hexdump -e '/4 "0x"' -e '/1 "%x"' -e '" "'\
+    echo fuse prog -y 0 0x18 $(hexdump -e '/4 "0x"' -e '/1 "%02x"' -e '" "'\
                  ${DEPLOY_DIR_IMAGE}/secureboot-pubkey-hash.bin) > ${DEPLOYDIR}/u-boot-fuse-prog.txt
 }
 
