@@ -8,7 +8,7 @@ LICENSE = "GPL-3.0-only"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e49f4652534af377a713df3d9dec60cb"
 
 SRC_URI = "git://github.com/embetrix/${BPN};branch=master;protocol=https"
-SRCREV = "3166bda08ea2d1647d744ca53c8fd4f19379884e"
+SRCREV = "b85320aac8da22e1affec0f0e24fc53d38e87a89"
 S = "${WORKDIR}/git"
 
 DEPENDS += "openssl"
