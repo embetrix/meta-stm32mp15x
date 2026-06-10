@@ -37,7 +37,7 @@ KAS_MACHINE=stm32mp157f-dk2 kas-container build kas-stm32mp15x.yml
 
 ## Flash SD Card
 
-Flash image on a SD Card using [bmap-tools](https://github.com/intel/bmap-tools):
+Flash image on a SD Card using [bmap-tools](https://github.com/yoctoproject/bmaptool):
 
 
 ```
