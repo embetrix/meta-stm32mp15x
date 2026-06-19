@@ -1,6 +1,6 @@
-From 100981de9788ee6a854685ce39c6043963076d18 Mon Sep 17 00:00:00 2001
+From d63dbde80546af992b6dfde0eadc3f3cf7e80187 Mon Sep 17 00:00:00 2001
 From: Ayoub Zaki <ayoub.zaki@embetrix.com>
-Date: Wed, 27 Dec 2023 15:07:18 +0700
+Date: Wed, 31 Jul 2024 17:50:34 +0200
 Subject: [PATCH 3/4] rework CONFIG_EXTRA_ENV_SETTINGS
 
 Signed-off-by: Ayoub Zaki <ayoub.zaki@embetrix.com>
@@ -9,10 +9,10 @@ Signed-off-by: Ayoub Zaki <ayoub.zaki@embetrix.com>
  1 file changed, 29 insertions(+), 13 deletions(-)
 
 diff --git a/include/configs/stm32mp15_st_common.h b/include/configs/stm32mp15_st_common.h
-index e9bfbc482ef..3218118d8df 100644
+index 7b0ed0a121..39c97b13e0 100644
 --- a/include/configs/stm32mp15_st_common.h
 +++ b/include/configs/stm32mp15_st_common.h
-@@ -28,21 +28,24 @@
+@@ -28,28 +28,44 @@
   * for nor boot, distro boot on SD card = mmc0 ONLY !
   */
  #define ST_STM32MP1_BOOTCMD "bootcmd_stm32mp=" \
@@ -49,8 +49,7 @@ index e9bfbc482ef..3218118d8df 100644
  #undef CONFIG_EXTRA_ENV_SETTINGS
  #define CONFIG_EXTRA_ENV_SETTINGS \
  	STM32MP_MEM_LAYOUT \
-@@ -50,7 +53,20 @@
- 	STM32MP_PARTS_DEFAULT \
+ 	ST_STM32MP1_BOOTCMD \
  	BOOTENV \
  	STM32MP_EXTRA \
 -	STM32MP_BOARD_EXTRA_ENV

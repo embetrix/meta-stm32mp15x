@@ -8,7 +8,7 @@ DEPENDS += "bc-native dtc-native u-boot-tools-native"
 DEPENDS += "python3-setuptools-native"
 
 SRCBRANCH = "v2022.10-stm32mp"
-SRCREV = "2c7a6accfa78d34c402fa262bb53f0b952198882"
+SRCREV = "262bcb6906d46aa2265be284b0b625eb2e0b674e"
 
 # disable task uboot_assemble_fitimage
 # seems to be broken somehow
